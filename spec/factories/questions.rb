@@ -4,4 +4,8 @@ FactoryGirl.define do
     body "MyTextMyText"
   end
 
+  factory :invalid_question, class: 'Question' do
+    title nil
+    body nil
+  end
 end

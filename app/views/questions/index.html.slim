@@ -1,0 +1,13 @@
+h1 Вопросы
+== link_to 'Задать вопрос', new_question_path
+hr
+
+- if @questions.any?
+  table
+  - @questions.each do |q|
+    tr
+      td
+        == link_to q.title, q
+- else
+  p Пока никто не задал ни одного вопроса.
+
