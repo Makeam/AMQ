@@ -2,9 +2,8 @@ class AnswersController < ApplicationController
 
 
   def create
-    @answer = Answer.new(answer_params)
-    @answer.question_id = params[:question_id]
     @question = Question.find(params[:question_id])
+    @answer = @question.answers.build(answer_params)
 
     if @answer.save
       redirect_to @answer.question
