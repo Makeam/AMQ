@@ -15,7 +15,13 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, question_id: question, answer: FactoryGirl.attributes_for(:answer) }.to change(Answer, :count).by(1)
       end
 
+      it 'creates аn answer associated with the question' do
+        post :create, question_id: question, answer: FactoryGirl.attributes_for(:answer)
+        answer = assigns(:answer)
+        expect(answer.question_id).to eq question.id
+      end
     end
+
     context 'with invalid attributes' do
       it 'does not save the answer' do
         expect { post :create, question_id: question, answer: FactoryGirl.attributes_for(:invalid_answer) }.to_not change(Answer, :count)
