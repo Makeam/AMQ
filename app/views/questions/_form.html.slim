@@ -1,4 +1,6 @@
-== form_for @question do |f|
-  == f.text_field :title
-  == f.text_field :body
-  == f.submit 'Сохранить'
+= form_for @question do |f|
+  = f.label :title, 'Title'
+  = f.text_field :title
+  = f.label :body, 'Body'
+  = f.text_field :body
+  = f.submit 'Save'
