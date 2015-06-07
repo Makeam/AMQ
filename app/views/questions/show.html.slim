@@ -2,7 +2,7 @@ h1
   == @question.title
 p
   == @question.body
-
+p = (link_to 'Delete my question', question_path(@question), method: 'delete') if (user_signed_in? and (current_user.id == @question.user_id))
 hr
 - if @question.answers.any?
   table

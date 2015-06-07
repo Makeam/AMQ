@@ -88,4 +88,24 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'POST #destroy' do
+
+    let(:user1){ create(:user) }
+    let(:user2){ create(:user) }
+    let(:question) { Question.create!(title:'Question title', body:'Question body', user_id: user1.id ) }
+    before {
+      question
+    }
+
+    it 'User is owner of question' do
+      login_him(user1)
+      expect{ post :destroy, id: question.id }.to change(Question, :count).by(-1)
+    end
+
+    it 'User is not owner of question' do
+      login_him(user2)
+      expect{ post :destroy, id: question.id }.to_not change(Question, :count)
+    end
+  end
+
 end
