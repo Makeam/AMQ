@@ -7,6 +7,6 @@ RSpec.describe User, type: :model do
   it { should validate_uniqueness_of :email}
 
   it { should have_many(:questions).dependent(:destroy) }
-  it { should have_many(:answer).dependent(:destroy) }
+  it { should have_many(:answers).dependent(:destroy) }
 
 end
