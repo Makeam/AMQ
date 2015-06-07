@@ -27,3 +27,39 @@ feature 'User sign in', %q{
   end
 
 end
+
+feature 'User sign out', %q{
+    In order to close session
+    As authenticated user
+    I want to sign out
+  }do
+
+  given(:user) { create(:user) }
+
+  scenario 'Authenticated user signing out' do
+    sign_in(user)
+
+    click_on 'Sign out'
+
+    expect(page).to have_content 'Signed out successfully'
+  end
+
+end
+
+feature 'Registration new user', %q{
+    In order to ask questions
+    As authenticated user
+    I want registration
+  }do
+
+  scenario 'User tries registration' do
+    visit new_user_registration_path
+    fill_in 'Email', with: 'new_user_email@test.com'
+    fill_in 'Password', with: '12345678'
+    fill_in 'Password confirmation', with: '12345678'
+    click_on 'Sign up'
+
+    expect(page).to have_content 'You have signed up successfully'
+
+  end
+end
