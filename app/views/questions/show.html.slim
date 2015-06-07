@@ -2,3 +2,21 @@ h1
   == @question.title
 p
   == @question.body
+
+hr
+- if @question.answers.any?
+  table
+    - @question.answers.find_each do |a|
+      tr
+        td = a.body
+- else
+  p No more answers.
+
+hr
+- if user_signed_in?
+  = form_for @answer, url: {controller:'answers', action: "create", question_id: @question} do |f|
+    =f.label :body
+    =f.text_field :body
+    =f.submit 'Save answer'
+- else
+  p To answer the question you need to sign in.

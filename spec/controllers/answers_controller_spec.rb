@@ -4,7 +4,8 @@ RSpec.describe AnswersController, type: :controller do
 
   let (:question) { FactoryGirl.create(:question) }
 
-  describe 'POST #create' do
+  describe 'POST #create User sign in' do
+    sign_in_user
     context 'with valid attributes' do
       it 'redirects to question#show view' do
         post :create, question_id: question, answer: FactoryGirl.attributes_for(:answer)
