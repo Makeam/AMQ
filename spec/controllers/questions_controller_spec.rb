@@ -65,10 +65,18 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    sign_in_user
-    context 'with valid attributes' do
+    let(:user1){ create(:user) }
+
+    context 'Authenticated user try create question with valid attributes' do
+      before { sign_in(user1) }
       it 'saves the new question in the database' do
         expect { post :create, question: FactoryGirl.attributes_for(:question) }.to change(Question, :count).by(1)
+      end
+
+      it 'assigns the question with current user' do
+        post :create, question: FactoryGirl.attributes_for(:question)
+        question = assigns(:question)
+        expect(question.user_id).to eq user1.id
       end
 
       it 'redirects to show view' do
@@ -76,7 +84,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
-    context 'with invalid attributes' do
+    context 'Authenticated user try create question with invalid attributes' do
+      before { sign_in(user1) }
       it 'does not save the question' do
         expect { post :create, question: FactoryGirl.attributes_for(:invalid_question) }.to_not change(Question, :count)
       end
@@ -86,24 +95,26 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :new
       end
     end
+    context 'Non-authenticated user try create question' do
+      it 'does not save the question' do
+        expect { post :create, question: FactoryGirl.attributes_for(:invalid_question) }.to_not change(Question, :count)
+      end
+    end
   end
 
   describe 'POST #destroy' do
 
     let(:user1){ create(:user) }
     let(:user2){ create(:user) }
-    let(:question) { Question.create!(title:'Question title', body:'Question body', user_id: user1.id ) }
-    before {
-      question
-    }
+    let!(:question) { create(:question, user: user1) }
 
     it 'User is owner of question' do
-      login_him(user1)
+      sign_in(user1)
       expect{ post :destroy, id: question.id }.to change(Question, :count).by(-1)
     end
 
     it 'User is not owner of question' do
-      login_him(user2)
+      sign_in(user2)
       expect{ post :destroy, id: question.id }.to_not change(Question, :count)
     end
   end

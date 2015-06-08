@@ -9,7 +9,8 @@ RSpec.describe AnswersController, type: :controller do
 
 
   describe 'POST #create User signed in' do
-    sign_in_user
+    before{ sign_in(user1) }
+
     context 'with valid attributes' do
       it 'redirects to question#show view' do
         post :create, question_id: question, answer: FactoryGirl.attributes_for(:answer)
@@ -23,6 +24,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'creates аn answer associated with the question' do
         post :create, question_id: question, answer: FactoryGirl.attributes_for(:answer)
         answer = assigns(:answer)
+        expect(answer.user_id).to eq user1.id
         expect(answer.question_id).to eq question.id
       end
     end
@@ -43,12 +45,12 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #destroy' do
     before { answer }
     it 'User is owner of the Answer, and can delete him' do
-      login_him(user1)
+      sign_in(user1)
       expect{ post :destroy, id: answer.id }.to change(question.answers, :count).by(-1)
     end
 
     it 'User is NOT owner of the Answer, and can\'t delete him' do
-      login_him(user2)
+      sign_in(user2)
       expect{ post :destroy, id: answer.id }.to_not change(question.answers, :count)
     end
   end

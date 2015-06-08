@@ -23,6 +23,8 @@ feature 'Creating answer to the question', %q{
     visit question_path(question)
 
     expect(page).to have_content 'To answer the question you need to sign in'
+    expect(page).to_not have_content ('Save answer')
+    expect(page).to_not have_css ('form')
   end
 
 end
@@ -32,9 +34,7 @@ feature 'Delete answer' do
   given(:user1){ create(:user) }
   given(:user2){ create(:user) }
   given(:question){ create(:question, user: user1) }
-  given(:answer){ create(:answer, question: question, user: user1) }
-
-  before { answer }
+  given!(:answer){ create(:answer, question: question, user: user1) }
 
   scenario 'User is owner the question' do
     sign_in(user1)
@@ -42,13 +42,19 @@ feature 'Delete answer' do
     click_on 'Delete my answer'
 
     expect(page).to have_content 'Answer successfully deleted'
+    expect(page).to_not have_content answer.body
   end
 
   scenario 'User is NOT owner the question' do
     sign_in(user2)
     visit question_path(question)
 
-    save_and_open_page
     expect(page).to_not have_content 'Delete my answer'
   end
+
+  scenario "Non-authenticated user can't delete answer" do
+    visit question_path(question)
+    expect(page).to_not have_content 'Delete my answer'
+  end
+
 end
