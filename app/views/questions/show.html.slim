@@ -5,17 +5,16 @@ p
 p = (link_to 'Delete my question', question_path(@question), method: 'delete') if (user_signed_in? and (current_user.id == @question.user_id))
 hr
 - if @question.answers.any?
-  table
+  .answers
     - @question.answers.find_each do |a|
-      tr
-        td = a.body
-        td = (link_to 'Delete my answer', answer_path(a), method: 'delete') if (user_signed_in? and (current_user.id == a.user_id))
+      p id="answer-#{a.id}"
+        = render partial:'questions/uno_answer', locals: {answer: a}
 - else
   p No more answers.
 
 hr
 - if user_signed_in?
-  = form_for @answer, url: {controller:'answers', action: "create", question_id: @question} do |f|
+  = form_for @answer, url: {controller:'answers', action: "create", question_id: @question}, remote: true do |f|
     =f.label :body
     =f.text_field :body
     =f.submit 'Save answer'

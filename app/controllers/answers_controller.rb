@@ -10,10 +10,8 @@ class AnswersController < ApplicationController
 
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
-      redirect_to @answer.question
     else
       flash[:notice] = 'Upss! Can not create Answer.'
-      render 'questions/show'
     end
   end
 
@@ -29,7 +27,7 @@ class AnswersController < ApplicationController
     else
       flash[:notice] ='You is not owner this answer.'
     end
-    redirect_to question_path(@question)
+    redirect_to @question
   end
 
   private

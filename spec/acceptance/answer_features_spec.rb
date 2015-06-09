@@ -9,7 +9,7 @@ feature 'Creating answer to the question', %q{
   given(:user){ create(:user) }
   given(:question){ create(:question) }
 
-  scenario 'Authenticated user tries create an answer' do
+  scenario 'Authenticated user tries create an answer', js: true do
     sign_in(user)
     visit question_path(question)
     fill_in 'Body', with: 'My test answer'
