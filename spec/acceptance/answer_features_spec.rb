@@ -15,7 +15,6 @@ feature 'Creating answer to the question', %q{
     fill_in 'Body', with: 'My test answer'
     click_on 'Save answer'
 
-    expect(page).to have_content 'Your answer successfully created'
     expect(page).to have_content 'My test answer'
   end
 
@@ -35,14 +34,15 @@ feature 'Delete answer' do
   given(:user2){ create(:user) }
   given(:question){ create(:question, user: user1) }
   given!(:answer){ create(:answer, question: question, user: user1) }
+  given!(:body_answer){ answer.body }
 
-  scenario 'User is owner the question' do
+  scenario 'User is owner the question', js: true do
     sign_in(user1)
     visit question_path(question)
     click_on 'Delete my answer'
 
-    expect(page).to have_content 'Answer successfully deleted'
-    expect(page).to_not have_content answer.body
+
+    expect(page).to_not have_content body_answer
   end
 
   scenario 'User is NOT owner the question' do

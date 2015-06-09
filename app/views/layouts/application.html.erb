@@ -14,8 +14,9 @@
     <%= link_to 'Registration', new_user_registration_path %>
 <% end %>
 <p></p>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+<div id="flash-messages">
+  <%= render partial: 'layouts/flash' %>
+</div>
 <%= yield %>
 
 </body>

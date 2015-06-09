@@ -1,2 +1,5 @@
+$('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200).delay(1000).fadeOut(400);
+
 $('.answers').append('<%= j render partial:'questions/uno_answer', locals: {answer: @answer} %>');
 $('#answer_body').val('');
+$('#no-answers').fadeOut(300);
