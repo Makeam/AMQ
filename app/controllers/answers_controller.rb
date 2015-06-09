@@ -10,16 +10,15 @@ class AnswersController < ApplicationController
 
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
-      redirect_to @answer.question
     else
       flash[:notice] = 'Upss! Can not create Answer.'
-      render 'questions/show'
     end
   end
 
   def destroy
     @answer = Answer.find(params[:id])
     @question = @answer.question
+    @answer_id = @answer.id
     if @answer.user_id == current_user.id
       if @answer.destroy
         flash[:notice] ='Answer successfully deleted.'
@@ -29,7 +28,6 @@ class AnswersController < ApplicationController
     else
       flash[:notice] ='You is not owner this answer.'
     end
-    redirect_to question_path(@question)
   end
 
   private
