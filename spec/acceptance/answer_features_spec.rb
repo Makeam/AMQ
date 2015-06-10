@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_config'
 
 feature 'Creating answer to the question', %q{
     In order to help question's author
