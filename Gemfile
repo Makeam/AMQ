@@ -27,6 +27,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'slim-rails'
 gem 'devise'
 
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem "therubyracer"
+gem 'less-rails-bootstrap'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -58,4 +61,5 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
   gem 'database_cleaner'
+  #gem 'capybara-webkit'
 end
