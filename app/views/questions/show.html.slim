@@ -1,8 +1,6 @@
-h1
-  == @question.title
-p
-  == @question.body
-p = (link_to 'Delete my question', question_path(@question), method: 'delete') if (user_signed_in? and (current_user.id == @question.user_id))
+h1= @question.title
+p= @question.body
+p= (link_to 'Delete my question', question_path(@question), method: 'delete') if (user_signed_in? and (current_user.id == @question.user_id))
 hr
 .answers
 - if @question.answers.any?
@@ -15,8 +13,10 @@ hr
 hr
 - if user_signed_in?
   = form_for @answer, url: {controller:'answers', action: "create", question_id: @question}, remote: true do |f|
-    =f.label :body
-    =f.text_field :body
-    =f.submit 'Save answer'
+    .form-group
+      =f.label :body
+      =f.text_area :body, class:'form-control', rows: '5'
+    .form-group
+      =f.submit 'Save answer', class:'btn btn-primary'
 - else
   p To answer the question you need to sign in.
