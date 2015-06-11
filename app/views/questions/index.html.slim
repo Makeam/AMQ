@@ -3,10 +3,10 @@ h1 Вопросы
 hr
 
 - if @questions.any?
-  table
-  - @questions.each do |q|
-    tr
-      td = link_to q.title, q
+  table.table
+    - @questions.each do |q|
+      tr
+        td= link_to q.title, q
 - else
   p Пока никто не задал ни одного вопроса.
 

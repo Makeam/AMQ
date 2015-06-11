@@ -1,3 +1,4 @@
 div id="answer-#{answer.id}"
-  =answer.body
-  =(link_to 'Delete my answer', answer_path(answer), method: 'delete', remote: true) if (user_signed_in? and (current_user.id == answer.user_id))
+  p=answer.body
+  =(link_to 'Delete my answer', answer_path(answer), method: 'delete', class:'btn btn-xs btn-default', remote: true) if (user_signed_in? and (current_user.id == answer.user_id))
+  hr
