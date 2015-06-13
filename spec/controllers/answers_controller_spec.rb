@@ -64,6 +64,12 @@ RSpec.describe AnswersController, type: :controller do
       expect(answer.body).to eq 'new answer body'
     end
 
+    it 'Renders set_best view' do
+      sign_in(owner)
+      patch :update, id: answer.id, question_id: question.id, answer: {body:'new answer body'}, format: :js
+      expect(response).to render_template ('update')
+    end
+
     it 'Not owner can\'t edit answer' do
       sign_in(user2)
       patch :update, id: answer.id, question_id: question.id, answer: {body:'new answer body'}, format: :js
@@ -94,6 +100,12 @@ RSpec.describe AnswersController, type: :controller do
 
       expect(answer.best).to eq false
       expect(answer2.best).to eq true
+    end
+
+    it 'Renders set_best view' do
+      sign_in(user1)
+      patch :set_best, id: answer.id, format: :js
+      expect(response).to render_template ('set_best')
     end
 
     it 'Not owner question can\'t select one of answers as Best answer' do

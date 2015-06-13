@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
 
   before_action :authenticate_user!
+  before_action :load_answer, only: [:update, :set_best, :destroy]
 
 
   def create
@@ -16,7 +17,6 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer = Answer.find(params[:id])
     if @answer.user_id == current_user.id
       @question = Question.find(params[:question_id])
 
@@ -31,9 +31,7 @@ class AnswersController < ApplicationController
   end
 
   def set_best
-    @answer = Answer.find(params[:id])
     if @answer.question.user_id == current_user.id
-      @answer.question.answers.update_all(best: false)
       @question = @answer.question
       if @answer.set_best
         flash[:notice] = 'You set the answer as Best answer'
@@ -49,7 +47,6 @@ class AnswersController < ApplicationController
 
 
   def destroy
-    @answer = Answer.find(params[:id])
     @question = @answer.question
     @answer_id = @answer.id
     if @answer.user_id == current_user.id
@@ -65,6 +62,10 @@ class AnswersController < ApplicationController
 
 
   private
+
+  def load_answer
+    @answer = Answer.find(params[:id])
+  end
 
   def answer_params
     params.require(:answer).permit(:body, :question_id)
