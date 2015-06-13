@@ -22,18 +22,33 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, id: question }
+    context 'question actions' do
+      before { get :show, id: question }
 
-    it 'assign the requested question to @question' do
-      expect(assigns(:question)).to eq question
+      it 'assign the requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it "assign new answer object for answer's form" do
+        expect(assigns(:answer)).to be_a_new(Answer)
+      end
+
+      it 'render show view' do
+        expect(response).to render_template :show
+      end
     end
+    context 'Answers actions' do
+      let!(:question1){create(:question)}
+      let!(:answer1){create(:answer, question: question1)}
+      let!(:answer2){create(:answer, question: question1)}
+      let!(:answer3){create(:answer, question: question1)}
+      before { get :show, id: question }
 
-    it "assign new answer object for answer's form" do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'render show view' do
-      expect(response).to render_template :show
+      it 'Orders answers by best desc' do
+        answer2.best = true
+        assigns(:question)
+        expect(question.answers).to eq(Answer.where("best = TRUE AND question_id = :qid", {qid: question.id}).order('best desc'))
+      end
     end
   end
 

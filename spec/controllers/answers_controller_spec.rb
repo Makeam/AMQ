@@ -96,8 +96,18 @@ RSpec.describe AnswersController, type: :controller do
       expect(answer2.best).to eq true
     end
 
-    it 'Not owner question can\'t select one of answers as Best answer'
+    it 'Not owner question can\'t select one of answers as Best answer' do
+      sign_in(user2)
+      patch :set_best, id: answer.id, format: :js
+      answer.reload
+      expect(answer.best).to eq false
+    end
 
-    it 'Non-authenticated user can\'t select one of answers as Best answer'
+    it 'Non-authenticated user can\'t select one of answers as Best answer' do
+      patch :set_best, id: answer.id, format: :js
+      answer.reload
+      expect(answer.best).to eq false
+    end
+
   end
 end
