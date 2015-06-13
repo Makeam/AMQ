@@ -7,4 +7,9 @@ class Answer < ActiveRecord::Base
   validates :body, length: { in: 5..3000 }
   validates :question_id, numericality: true
 
+  def set_best
+    self.best = true
+    return self.save
+  end
+
 end

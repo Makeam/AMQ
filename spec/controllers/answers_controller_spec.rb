@@ -76,7 +76,28 @@ RSpec.describe AnswersController, type: :controller do
       answer.reload
       expect(answer.body).to_not eq 'new answer body'
     end
-
   end
 
+  describe 'PATCH #set_best' do
+    let(:user1){ create(:user) }
+    let(:user2){ create(:user) }
+    let!(:question){ create(:question, user: user1) }
+    let!(:answer){ create(:answer, question: question, user: user2) }
+    let!(:answer2){ create(:answer, question: question, user: user2) }
+
+    it 'Question\'s owner can select one of answers as Best answer' do
+      sign_in(user1)
+      patch :set_best, id: answer.id, format: :js
+      patch :set_best, id: answer2.id, format: :js
+      answer.reload
+      answer2.reload
+
+      expect(answer.best).to eq false
+      expect(answer2.best).to eq true
+    end
+
+    it 'Not owner question can\'t select one of answers as Best answer'
+
+    it 'Non-authenticated user can\'t select one of answers as Best answer'
+  end
 end

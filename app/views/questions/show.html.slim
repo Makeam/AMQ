@@ -1,12 +1,7 @@
 .question
   =render 'questions/question'
 .answers
-- if @question.answers.any?
-  - @question.answers.find_each do |a|
-    = render partial:'questions/uno_answer', locals: {answer: a, question: @question}
-  #no-answers
-- else
-  #no-answers No answers.
+  =render 'questions/answers'
 
 hr
 - if user_signed_in?

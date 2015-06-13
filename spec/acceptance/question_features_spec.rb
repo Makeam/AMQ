@@ -163,7 +163,31 @@ feature 'Select best answer to the question' do
   given!(:answer){create(:answer, question: question, user: user2)}
   given!(:answer2){create(:answer, question: question, user: user2)}
 
-  scenario 'Question\'s owner can select one of answers as Best Answer'
-  scenario 'Not owner can\'t select answers as Best Answer'
-  scenario 'Non-authenticated user can\'t select answers as Best Answer'
+  scenario 'Question\'s owner can select one of answers as Best Answer', js: true do
+    sign_in(user1)
+    visit question_path(question)
+    within("#answer-#{answer.id}") do
+      click_on 'Set best'
+    end
+    within("#answer-#{answer2.id}") do
+      click_on 'Set best'
+    end
+    within("#answer-#{answer.id}") do
+      expect(page).to_not have_content 'Best answer'
+    end
+    within("#answer-#{answer2.id}") do
+      expect(page).to have_content 'Best answer'
+    end
+  end
+
+  scenario 'Not owner can\'t select answers as Best Answer' do
+    sign_in(user2)
+    visit question_path(question)
+    expect(page).to_not have_content 'Set best'
+  end
+
+  scenario 'Non-authenticated user can\'t select answers as Best Answer' do
+    visit question_path(question)
+    expect(page).to_not have_content 'Set best'
+  end
 end

@@ -30,6 +30,24 @@ class AnswersController < ApplicationController
     end
   end
 
+  def set_best
+    @answer = Answer.find(params[:id])
+    if @answer.question.user_id == current_user.id
+      @answer.question.answers.update_all(best: false)
+      @question = @answer.question
+      if @answer.set_best
+        flash[:notice] = 'You set the answer as Best answer'
+      else
+        flash[:notice] = 'Upss! Best answer not set.'
+      end
+
+    else
+      flash[:notice] = 'You can\'t set Best answer.'
+    end
+  end
+
+
+
   def destroy
     @answer = Answer.find(params[:id])
     @question = @answer.question

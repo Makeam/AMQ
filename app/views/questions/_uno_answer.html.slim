@@ -1,4 +1,6 @@
 div id="answer-#{answer.id}"
+  p.best-answer
+    = render partial: 'questions/best_label', locals: {answer: answer}
   p.answer-body
     =answer.body
   - if (user_signed_in? and (current_user.id == answer.user_id))
