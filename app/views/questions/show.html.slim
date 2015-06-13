@@ -1,14 +1,7 @@
-h1= @question.title
-p= @question.body
-p= (link_to 'Delete my question', question_path(@question), method: 'delete') if (user_signed_in? and (current_user.id == @question.user_id))
-hr
+.question
+  =render 'questions/question'
 .answers
-- if @question.answers.any?
-  - @question.answers.find_each do |a|
-    = render partial:'questions/uno_answer', locals: {answer: a}
-  #no-answers
-- else
-  #no-answers No answers.
+  =render 'questions/answers'
 
 hr
 - if user_signed_in?

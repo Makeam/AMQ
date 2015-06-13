@@ -16,3 +16,11 @@
  *= require_tree .
  *= require_self
  */
+
+
+.edit-answer-form {
+    display: none;
+}
+.edit-question-form {
+    display: none;
+}

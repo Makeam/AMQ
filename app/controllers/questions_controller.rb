@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except:[:index, :show]
-  before_action :load_question, only:[:show, :edit, :destroy]
+  before_action :load_question, only:[:show, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -14,9 +14,6 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit
-  end
-
   def create
     @question = Question.new(question_params)
     @question.user_id = current_user.id
@@ -25,6 +22,18 @@ class QuestionsController < ApplicationController
       redirect_to @question
     else
       render :new
+    end
+  end
+
+  def update
+    if @question.user_id == current_user.id
+      if @question.update(question_params)
+        flash[:notice] = 'Your Question successfully updated.'
+      else
+        flash[:notice] = 'Can not update your Question.'
+      end
+    else
+      flash[:notice] = 'You is not owner this question.'
     end
   end
 

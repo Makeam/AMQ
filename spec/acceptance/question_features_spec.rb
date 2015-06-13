@@ -120,3 +120,4 @@ feature 'Delete question' do
     expect(page).to_not have_content 'Delete my question'
   end
 end
+

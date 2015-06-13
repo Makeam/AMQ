@@ -1,0 +1,10 @@
+h1= @question.title
+p.question-body-text= @question.body
+- if (user_signed_in? and (current_user.id == @question.user.id))
+  .edit-question-form
+    =render partial: 'questions/form'
+  p
+    = link_to 'Edit', '', class:'btn btn-xs btn-default edit-question-link', remote: true
+    |&nbsp;
+    = link_to 'Delete my question', question_path(@question), method: 'delete', class:'btn btn-xs btn-default'
+hr

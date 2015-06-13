@@ -7,4 +7,11 @@ class Answer < ActiveRecord::Base
   validates :body, length: { in: 5..3000 }
   validates :question_id, numericality: true
 
+  def set_best
+    self.transaction do
+      self.question.answers.update_all(best: false)
+      self.update!(best: true)
+    end
+  end
+
 end

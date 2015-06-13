@@ -1,7 +1,8 @@
 class Question < ActiveRecord::Base
 
   belongs_to :user
-  has_many :answers, dependent: :destroy
+  has_many :answers, -> { order "best DESC" },
+           dependent: :destroy
 
   validates :title, :body, :user_id, presence: true
   validates :title, length:{ in: 10..256 }
