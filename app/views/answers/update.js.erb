@@ -1,0 +1,8 @@
+$('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200).delay(15000).fadeOut(400);
+
+$('<%= j "#answer-#{@answer.id}" %>').html('<%= j render partial:'questions/uno_answer', locals: {answer: @answer} %>');
+$('<%= j "#answer-#{@answer.id} .edit-answer-form" %>').hide();
+
+$('<%= j "#answer-#{@answer.id} .edit-answer-link" %>').click(function(){
+    return show_edit_form(this);
+});

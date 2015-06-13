@@ -1,4 +1,16 @@
 div id="answer-#{answer.id}"
-  p=answer.body
-  =(link_to 'Delete my answer', answer_path(answer), method: 'delete', class:'btn btn-xs btn-default', remote: true) if (user_signed_in? and (current_user.id == answer.user_id))
+  p.answer-body
+    =answer.body
+  - if (user_signed_in? and (current_user.id == answer.user_id))
+    .edit-answer-form
+      = form_for answer, url: {controller:'answers', action: "update", question_id: answer.question_id, id: answer.id}, remote: true do |f|
+        .form-group
+          =f.label_tag :body
+          =f.text_area :body, class:'form-control', rows: '2'
+        .form-group
+          =f.submit 'Save', class:'btn btn-xs btn-primary'
+
+    =(link_to 'Edit', '', class:'btn btn-xs btn-default edit-answer-link', data:{answer_id: answer.id}, remote: true)
+    |&nbsp;
+    =(link_to 'Delete my answer', answer_path(answer), method: 'delete', class:'btn btn-xs btn-default', remote: true)
   hr

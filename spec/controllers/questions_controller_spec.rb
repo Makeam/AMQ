@@ -51,19 +51,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, id: question }
-
-    it 'assign the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'render edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     let(:user1){ create(:user) }
 
@@ -104,12 +91,12 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #destroy' do
 
-    let(:user1){ create(:user) }
+    let(:owner){ create(:user) }
     let(:user2){ create(:user) }
-    let!(:question) { create(:question, user: user1) }
+    let!(:question) { create(:question, user: owner) }
 
     it 'User is owner of question' do
-      sign_in(user1)
+      sign_in(owner)
       expect{ post :destroy, id: question.id }.to change(Question, :count).by(-1)
     end
 
@@ -118,5 +105,36 @@ RSpec.describe QuestionsController, type: :controller do
       expect{ post :destroy, id: question.id }.to_not change(Question, :count)
     end
   end
+
+  describe 'PATCH #update' do
+    let(:owner){ create(:user) }
+    let(:user2){ create(:user) }
+    let!(:question) { create(:question, user: owner) }
+
+    it 'Answer\'s owner can edit answer' do
+      sign_in(owner)
+      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :js
+      question.reload
+      expect(question.title).to eq 'New title question'
+      expect(question.body).to eq 'New body question'
+    end
+
+    it 'Not owner can\'t edit answer' do
+      sign_in(user2)
+      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :js
+      question.reload
+      expect(question.title).to_not eq 'New title question'
+      expect(question.body).to_not eq 'New body question'
+    end
+
+    it 'Non-authenticated user can\'t edit answer' do
+      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :js
+      question.reload
+      expect(question.title).to_not eq 'New title question'
+      expect(question.body).to_not eq 'New body question'
+    end
+
+  end
+
 
 end

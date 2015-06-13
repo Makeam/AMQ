@@ -1,6 +1,9 @@
-= form_for @question do |f|
-  = f.label :title, 'Title'
-  = f.text_field :title
-  = f.label :body, 'Body'
-  = f.text_field :body
-  = f.submit 'Save'
+= form_for @question, remote: !@question.new_record? do |f|
+  .form-group
+    = f.label :title, 'Title'
+    = f.text_field :title, class:'form-control'
+  .form-group
+    = f.label :body, 'Body'
+    = f.text_area :body, class:'form-control', rows:'5'
+  .form-group
+    = f.submit 'Save', class: 'btn btn-primary'
