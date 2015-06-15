@@ -9,11 +9,9 @@ class Answer < ActiveRecord::Base
 
   def set_best
     self.transaction do
-      self.question.answers.find_each do |a|
-        a.update!(best: false)
-      end
+      self.question.answers.update_all(best: false)
+      self.update!(best: true)
     end
-    self.update(best: true)
   end
 
 end
