@@ -8,8 +8,12 @@ class Answer < ActiveRecord::Base
   validates :question_id, numericality: true
 
   def set_best
-    self.question.answers.update_all(best: false)
-    return self.update(best: true)
+    self.transaction do
+      self.question.answers.find_each do |a|
+        a.update!(best: false)
+      end
+    end
+    self.update(best: true)
   end
 
 end
