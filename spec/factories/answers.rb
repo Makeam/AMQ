@@ -11,6 +11,13 @@ FactoryGirl.define do
     best 'false'
   end
 
+  factory :best_answer, class: 'Answer' do
+    body
+    question
+    user
+    best 'true'
+  end
+
   factory :invalid_answer, class: 'Answer'  do
     body nil
     question
