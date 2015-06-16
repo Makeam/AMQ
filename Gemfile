@@ -59,7 +59,8 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
+  gem 'poltergeist'
+  #gem 'selenium-webdriver'
   #gem 'capybara-webkit'
 end
