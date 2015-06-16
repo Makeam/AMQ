@@ -1,7 +1,8 @@
 $('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200).delay(15000).fadeOut(400);
 
-$('<%= j ".question" %>').html('<%= j render partial:'questions/question', locals: {question: @question} %>');
+<% if remotipart_submitted? %>
+    $('.question').html('<%= j "#{ render partial:'questions/question', locals: {question: @question} }" %>');
+<% else %>
+    $('.question').html('<%= j render partial:'questions/question', locals: {question: @question} %>');
+<% end %>
 
-$('<%= j "a.edit-question-link" %>').click(function(){
-    return show_edit_question_form(this);
-});

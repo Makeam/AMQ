@@ -1,7 +1,7 @@
 .question
-  =render 'questions/question'
+  = render partial: 'questions/question', locals:{question: @question}
 .answers
-  =render 'questions/answers'
+  = render 'questions/answers'
 
 hr
 - if user_signed_in?
@@ -9,6 +9,11 @@ hr
     .form-group
       =f.label :body
       =f.text_area :body, class:'form-control', rows: '5'
+    .answer-attachments
+      = f.fields_for :attachments do |a|
+        = render partial:"attachment_fields", locals:{f: a}
+      .add-file-link
+        = link_to_add_association 'Add file', f, :attachments
     .form-group
       =f.submit 'Save answer', class:'btn btn-primary'
 - else

@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'slim-rails'
 gem 'devise'
+gem 'carrierwave'
+gem 'remotipart'
+gem "cocoon"
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"
@@ -59,7 +62,8 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
+  gem 'poltergeist'
+  #gem 'selenium-webdriver'
   #gem 'capybara-webkit'
 end
