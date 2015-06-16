@@ -2,6 +2,3 @@ $('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200)
 
 $('<%= j ".question" %>').html('<%= j render partial:'questions/question', locals: {question: @question} %>');
 
-$('<%= j "a.edit-question-link" %>').click(function(){
-    return show_edit_question_form(this);
-});
