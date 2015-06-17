@@ -6,4 +6,8 @@
     = f.label :body, 'Body'
     = f.text_area :body, class:'form-control', rows:'5'
   .form-group
+    = f.fields_for :attachments do |a|
+      = a.label :file, 'Attach file'
+      = a.file_field :file
+  .form-group
     = f.submit 'Save', class: 'btn btn-primary'

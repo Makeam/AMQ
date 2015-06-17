@@ -46,11 +46,13 @@ feature 'Best answer is the first answer' do
   scenario 'User select another answer as best and answer become first answer', js: true do
     sign_in(user1)
     visit question_path(question)
+    sleep(1)
     within('.answers .answer:first-child') do
       expect(page).to have_content answer1.body
       expect(page).to have_content 'Best answer'
     end
     click_on 'Set best'
+    sleep(1)
     within('.answers .answer:first-child') do
       expect(page).to have_content answer2.body
       expect(page).to have_content 'Best answer'

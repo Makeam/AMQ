@@ -1,5 +1,5 @@
 -if answer.best
-  span.label.label-success Best answer
+  span.best-answer-label.label-success Best answer
 -else
   - if (user_signed_in? and (current_user.id == answer.question.user_id))
     = link_to 'Set best', set_best_path(answer), method: 'patch', remote: true
