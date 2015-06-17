@@ -13,15 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.remotipart
+//= require cocoon
 //= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .
 
-
-//show_edit_form = function(th) {
-//    var answer_id;
-//    $(th).hide();
-//    answer_id = $(th).data('answerId');
-//    $('#answer-' + answer_id + ' .answer-body').hide();
-//    $('#answer-' + answer_id + ' .edit-answer-form').show();
-//};

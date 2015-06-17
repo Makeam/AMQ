@@ -28,6 +28,7 @@ gem 'slim-rails'
 gem 'devise'
 gem 'carrierwave'
 gem 'remotipart'
+gem "cocoon"
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"

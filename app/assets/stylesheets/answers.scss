@@ -8,3 +8,11 @@
   margin-left: 0px;
   border-radius: 2px;
 }
+
+
+.question-attachments .nested-fields:first-child{
+  background-color: #B00100;
+}
+.question-attachments .nested-fields:nth-child(2){
+  background-color: #2E2F30;
+}

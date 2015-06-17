@@ -5,9 +5,11 @@
   .form-group
     = f.label :body, 'Body'
     = f.text_area :body, class:'form-control', rows:'5'
-  .form-group
+  .question-attachments
     = f.fields_for :attachments do |a|
-      = a.label :file, 'Attach file'
-      = a.file_field :file
+      /.nested-fields qwertrty
+      = render partial:"attachment_fields", locals:{f: a}
+    .links
+      = link_to_add_association 'Add file', f, :attachments
   .form-group
     = f.submit 'Save', class: 'btn btn-primary'
