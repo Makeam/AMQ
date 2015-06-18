@@ -1,16 +1,16 @@
-h1= @question.title
-p.question-body-text= @question.body
-p.question-attachments
-  ul
-    - @question.attachments.each do |a|
-      li id="attach-#{a.id}"
-        = link_to a.file.filename, a.file.url
-        = (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default') if is_owner_of?(@question)
-- if is_owner_of?(@question)
+h1= question.title
+p.question-body-text= question.body
+.question-attachments
+  - question.attachments.each do |a|
+    p id="attach-#{a.id}"
+      = link_to a.file.filename, a.file.url
+      |&nbsp;
+      = (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default') if is_owner_of?(question)
+- if is_owner_of?(question)
   .edit-question-form
-    =render partial: 'questions/form'
+    =render partial: 'questions/form', locals: {question: question}
   p
     = link_to 'Edit', '', class:'btn btn-xs btn-default edit-question-link', remote: true
     |&nbsp;
-    = link_to 'Delete my question', question_path(@question), method: 'delete', class:'btn btn-xs btn-default'
+    = link_to 'Delete my question', question_path(question), method: 'delete', class:'btn btn-xs btn-default'
 hr

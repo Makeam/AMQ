@@ -1,14 +1,22 @@
-= form_for @question, remote: !@question.new_record? do |f|
+= form_for question, remote: !question.new_record? do |f|
   .form-group
     = f.label :title, 'Title'
     = f.text_field :title, class:'form-control'
   .form-group
     = f.label :body, 'Body'
     = f.text_area :body, class:'form-control', rows:'5'
-  .question-attachments
+  .question-attachments-fields
     = f.fields_for :attachments do |a|
-      = render partial:"attachment_fields", locals:{f: a}
-    .links
-      = link_to_add_association 'Add file', f, :attachments
+      - attachment = a.object
+      - if attachment.new_record?
+        = render partial:'questions/attachment_fields', locals:{f: a}
+      - else
+        p id="attach-#{attachment.id}"
+          = link_to attachment.file.filename, attachment.file.url
+          |&nbsp;
+          = link_to 'Delete file', remove_attach_path(attachment.id), method: :delete, remote: true, class:'btn btn-xs btn-default'
+
+    .add-file-link
+      = link_to_add_association 'Add file', f, :attachments, partial:'questions/attachment_fields'
   .form-group
     = f.submit 'Save', class: 'btn btn-primary'
