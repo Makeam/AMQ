@@ -14,8 +14,10 @@ feature 'Add files to answer' do
     attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Save answer'
 
+    attach = question.answers.first.attachments.first
+
     within '.answers' do
-      expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/1/spec_helper.rb"
+      expect(page).to have_link attach.file.filename, href: attach.file.url
     end
   end
 
@@ -25,15 +27,19 @@ feature 'Add files to answer' do
       attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     end
     click_on 'Add file'
-    sleep(1)
+
     within ('.answer-attachments .nested-fields:nth-child(2)') do
       attach_file 'Attach file', "#{Rails.root}/spec/rails_helper.rb"
     end
     click_on 'Save answer'
 
+    answer = question.answers.first
+    attaches = []
+    answer.attachments.each { |a| attaches << a }
+
     within '.answers' do
-      expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/1/spec_helper.rb"
-      expect(page).to have_link "rails_helper.rb", href: "/uploads/attachment/file/2/rails_helper.rb"
+      expect(page).to have_link attaches[0].file.filename, href: attaches[0].file.url
+      expect(page).to have_link attaches[1].file.filename, href: attaches[1].file.url
     end
   end
 end
@@ -58,6 +64,10 @@ feature 'Add files to answer during editing' do
       click_on 'Save'
     end
 
-    expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/1/spec_helper.rb"
+    attach = question.answers.first.attachments.first
+
+    within '.answers' do
+      expect(page).to have_link attach.file.filename, href: attach.file.url
+    end
   end
 end

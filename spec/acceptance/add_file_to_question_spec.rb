@@ -14,7 +14,8 @@ feature 'Add files to question' do
     attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Save'
 
-    expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/1/spec_helper.rb"
+    attach = Question.first.attachments.first
+    expect(page).to have_link attach.file.filename, href: attach.file.url
   end
 
   scenario 'User adds some files when ask question', js: true do
@@ -30,8 +31,12 @@ feature 'Add files to question' do
     end
     click_on 'Save'
 
-    expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/2/spec_helper.rb"
-    expect(page).to have_link "rails_helper.rb", href: "/uploads/attachment/file/3/rails_helper.rb"
+    question = Question.first
+    attaches = []
+    question.attachments.each {|a| attaches << a }
+
+    expect(page).to have_link attaches[0].file.filename, href: attaches[0].file.url
+    expect(page).to have_link attaches[1].file.filename, href: attaches[1].file.url
   end
 end
 
@@ -55,6 +60,7 @@ feature 'Add files to question' do
       click_on 'Save'
     end
 
-    expect(page).to have_link "spec_helper.rb", href: "/uploads/attachment/file/1/spec_helper.rb"
+    attach = Question.first.attachments.first
+    expect(page).to have_link attach.file.filename, href: attach.file.url
   end
 end
