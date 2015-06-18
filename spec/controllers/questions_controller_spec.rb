@@ -143,9 +143,6 @@ RSpec.describe QuestionsController, type: :controller do
       expect(question.body).to eq 'New body question'
     end
 
-    it 'build new attachment for question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
-    end
 
     it 'Not owner can\'t edit answer' do
       sign_in(user2)
