@@ -1,0 +1,5 @@
+$('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200).delay(15000).fadeOut(400);
+
+<% if is_owner_of?(@attachable) %>
+   $('<%= j "#attach-#{@attachment.id}" %>').remove();
+<% end %>

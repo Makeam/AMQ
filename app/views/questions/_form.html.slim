@@ -7,7 +7,6 @@
     = f.text_area :body, class:'form-control', rows:'5'
   .question-attachments
     = f.fields_for :attachments do |a|
-      /.nested-fields qwertrty
       = render partial:"attachment_fields", locals:{f: a}
     .links
       = link_to_add_association 'Add file', f, :attachments

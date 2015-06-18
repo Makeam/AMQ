@@ -5,9 +5,10 @@ div.answer id="answer-#{answer.id}"
     =answer.body
     ul
       - answer.attachments.each do |a|
-        li= link_to a.file.filename, a.file.url
-
-  - if (user_signed_in? and (current_user.id == answer.user_id))
+        li id="attach-#{a.id}"
+          = link_to a.file.filename, a.file.url
+          = (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default') if is_owner_of?(answer)
+  - if is_owner_of?(answer)
     .edit-answer-form
       = form_for answer, url: {controller:'answers', action: "update", question_id: answer.question_id, id: answer.id}, remote: true do |f|
         .form-group

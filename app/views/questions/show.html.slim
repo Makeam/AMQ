@@ -9,10 +9,11 @@ hr
     .form-group
       =f.label :body
       =f.text_area :body, class:'form-control', rows: '5'
-    .form-group
+    .answer-attachments
       = f.fields_for :attachments do |a|
-        = a.label :file, 'Attach file'
-        = a.file_field :file
+        = render partial:"attachment_fields", locals:{f: a}
+      .links
+        = link_to_add_association 'Add file', f, :attachments
     .form-group
       =f.submit 'Save answer', class:'btn btn-primary'
 - else

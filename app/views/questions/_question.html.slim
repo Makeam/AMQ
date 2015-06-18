@@ -3,8 +3,10 @@ p.question-body-text= @question.body
 p.question-attachments
   ul
     - @question.attachments.each do |a|
-      li= link_to a.file.filename, a.file.url
-- if (user_signed_in? and (current_user.id == @question.user.id))
+      li id="attach-#{a.id}"
+        = link_to a.file.filename, a.file.url
+        = (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default') if is_owner_of?(@question)
+- if is_owner_of?(@question)
   .edit-question-form
     =render partial: 'questions/form'
   p

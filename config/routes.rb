@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     resources :answers, shallow: true
   end
 
+  delete 'attachment/:id' => 'attachments#destroy', as: :remove_attach
+
   patch 'answers/:id/set_best' => 'answers#set_best', as: :set_best
 
   # The priority is based upon order of creation: first created -> highest priority.

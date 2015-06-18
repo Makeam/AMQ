@@ -22,7 +22,6 @@ feature 'Add files to question' do
     fill_in 'Body', with: 'Body question text'
     click_on 'Add file'
     within ('.question-attachments .nested-fields:first-child') do
-      #attach_file 'Attach file', "#{Rails.root}/spec/rails_helper.rb"
       attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     end
     sleep(1)
