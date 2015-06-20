@@ -1,6 +1,11 @@
 div.answer id="answer-#{answer.id}"
-  p.best-answer
-    = render partial: 'questions/best_label', locals: {answer: answer}
+  .row
+    .col-md-7
+      p.best-answer
+        = render partial: 'questions/best_label', locals: {answer: answer}
+    .col-md-5
+      p.rating.pull-right
+        = render partial: 'answers/rating', locals: {answer: answer}
   p.answer-body
     =answer.body
     - if answer.attachments.any?

@@ -45,7 +45,6 @@ class AnswersController < ApplicationController
   end
 
 
-
   def destroy
     @question = @answer.question
     @answer_id = @answer.id
