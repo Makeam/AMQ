@@ -1,18 +1,20 @@
 div.answer id="answer-#{answer.id}"
-  p.best-answer
-    = render partial: 'questions/best_label', locals: {answer: answer}
+  .row
+    .col-md-7
+      .best-answer = render partial: 'questions/best_label', locals: {answer: answer}
+    .col-md-5
+      .rating = render partial: 'answers/rating', locals: {votable: answer}
   p.answer-body
     =answer.body
     - if answer.attachments.any?
       .answer-attachments
         - answer.attachments.find_each do |a|
           p id="attach-#{a.id}"
-            = link_to a.file.filename, a.file.url
-            |&nbsp;
-            = (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default') if is_owner_of?(answer)
+            => link_to a.file.filename, a.file.url
+            = (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'delete-attach btn btn-xs btn-default') if is_owner_of?(answer)
   - if is_owner_of?(answer)
     .edit-answer-form
-      = form_for answer, url: {controller:'answers', action: "update", question_id: answer.question_id, id: answer.id}, remote: true do |f|
+      = form_for answer, url: {controller:'answers', action: "update", question_id: answer.question_id, id: answer.id}, remote: true, format:'json', data: {type: :json} do |f|
         .form-group
           =f.label :body
           =f.text_area :body, class:'form-control', rows: '2'
@@ -23,15 +25,14 @@ div.answer id="answer-#{answer.id}"
               = render partial:'questions/attachment_fields', locals:{f: a}
             - else
               p id="attach-#{attachment.id}"
-                = link_to attachment.file.filename, attachment.file.url
-                |&nbsp;
-                = link_to 'Delete file', remove_attach_path(attachment.id), method: :delete, remote: true, class:'btn btn-xs btn-default'
+                => link_to attachment.file.filename, attachment.file.url
+                =  link_to 'Delete file', remove_attach_path(attachment.id), method: :delete, remote: true, class:'delete-attach btn btn-xs btn-default'
           .add-file-link
             = link_to_add_association 'Add file', f, :attachments, partial:'questions/attachment_fields'
         .form-group
           = f.submit 'Save', class:'btn btn-sm btn-primary'
 
-    =(link_to 'Edit', '', class:'btn btn-xs btn-default edit-answer-link', data:{answer_id: answer.id}, remote: true)
-    |&nbsp;
+    =>(link_to 'Edit', '', class:'btn btn-xs btn-default edit-answer-link', data:{answer_id: answer.id}, remote: true)
     =(link_to 'Delete my answer', answer_path(answer), method: 'delete', class:'btn btn-xs btn-default', remote: true)
+  p: small = answer.user.email
   hr

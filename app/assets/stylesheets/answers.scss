@@ -4,7 +4,19 @@
 
 .best-answer-label {
   color: #fff;
-  padding: 4px;
+  padding: 4px 8px 4px 8px;
   margin-left: 0px;
-  border-radius: 2px;
+  border-radius: 10px;
+}
+
+.butt {
+  margin-left: 5px;
+}
+
+.rating-sum {
+  float: left;
+  color: #fff;
+  padding: 1px 6px 1px 6px;
+  margin-left: 0px;
+  border-radius: 8px;
 }

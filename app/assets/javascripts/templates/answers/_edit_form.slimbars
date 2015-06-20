@@ -1,0 +1,26 @@
+div.form-errors
+form.edit_answer id="edit_answer_{{ answer.id }}" enctype="multipart/form-data" action="/answers/{{ answer.id }}?question_id={{ answer.question_id }}" data-type="json" accept-charset="UTF-8" data-remote="true" method="post"
+  input name="utf8" type="hidden" value="&#x2713;"
+  input type="hidden" name="_method" value="patch"
+  .form-group
+    label for="answer_body" Body
+    textarea.form-control rows="2" name="answer[body]" id="answer_body"
+      | {{ answer.body }}
+  .answer-attachments-fields
+    | {{> answers/_attachments}}
+    .add-file-link
+      a.add_fields[
+      data-association="attachment"
+      data-associations="attachments"
+      data-association-insertion-template="
+      <div class='nested-fields'>
+      <div class='form-group'>
+      <label for='answer_attachments_attributes_new_attachments_file'> Attach file </label>
+      <input type='file' name='answer[attachments_attributes][new_attachments][file]' id='answer_attachments_attributes_new_attachments_file' />
+      </div>
+      <input type='hidden' name='answer[attachments_attributes][new_attachments][_destroy]' id='answer_attachments_attributes_new_attachments__destroy' value='false' />
+      <a class='remove_fields dynamic' href='#'> remove file </a>
+      </div>"
+      href="#"] Add file
+  .form-group
+    input.btn.btn-sm.btn-primary type="submit" name="commit" value="Save"

@@ -1,0 +1,17 @@
+p.rating-sum.label-default
+  | {{ rating }}
+p.links
+  |{{#if canRate}}
+      {{#if vote }}
+        {{#if vote_up }}
+  a.set-vote.butt.btn.btn-xs.btn-default id="set-vote-down" data-remote="true" rel="nofollow" data-method="patch" href="/votes/set_vote?votable_id={{ votable_id }}&votable_type={{ votable_type }}&weight=-1" down
+  a.cancel-vote.butt.btn.btn-xs.btn-default id="cancel-vote"  data-remote="true" rel="nofollow" data-method="delete" href="/vote/{{ vote.id }}" cancel my vote
+  |     {{else}}
+  a.set-vote.butt.btn.btn-xs.btn-default id="set-vote-up"     data-remote="true" rel="nofollow" data-method="patch"  href="/votes/set_vote?votable_id={{ votable_id }}&votable_type={{ votable_type }}&weight=1" up
+  a.cancel-vote.butt.btn.btn-xs.btn-default id="cancel-vote"  data-remote="true" rel="nofollow" data-method="delete" href="/vote/{{ vote.id }}" cancel my vote
+  |     {{/if}}
+  |   {{else}}
+  a.set-vote.butt.btn.btn-xs.btn-default id="set-vote-up"   data-remote="true" rel="nofollow" data-method="patch" href="/votes/set_vote?votable_id={{ votable_id }}&votable_type={{ votable_type }}&weight=1" up
+  a.set-vote.butt.btn.btn-xs.btn-default id="set-vote-down" data-remote="true" rel="nofollow" data-method="patch" href="/votes/set_vote?votable_id={{ votable_id }}&votable_type={{ votable_type }}&weight=-1" down
+  |   {{/if}}
+  |{{/if}}

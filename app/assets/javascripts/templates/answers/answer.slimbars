@@ -1,0 +1,23 @@
+div.answer id="answer-{{ answer.id }}"
+  .row
+    .col-md-7
+      .best-answer
+        | {{> answers/_best_label }}
+    .col-md-5
+      .rating
+        | {{> answers/_rating }}
+  p.answer-body
+    | {{ answer.body }}
+    .answer-attachments
+      | {{#if attachments}}
+          {{> answers/_attachments }}
+        {{/if}}
+  | {{#unless canRate }}
+  .edit-answer-form
+    | {{> answers/_edit_form }}
+  a.btn.btn-xs.btn-default.edit-answer-link> data-answer-id="{{ answer.id }}" data-remote="true" href="#" Edit
+  a.btn.btn-xs.btn-default data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{ answer.id }}" Delete my answer
+  | {{/unless }}
+  p: small
+    | {{ email }}
+  hr

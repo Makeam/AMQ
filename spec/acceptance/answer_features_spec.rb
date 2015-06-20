@@ -78,7 +78,7 @@ feature 'Edit answer' do
       expect(page).to have_content 'New answer body'
     end
   end
-  scenario 'Not owner can\'t edit the answer', js:true do
+  scenario 'Not owner can\'t edit the answer', js: true do
     sign_in(user)
     visit question_path(question)
 
