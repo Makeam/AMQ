@@ -28,19 +28,21 @@ ready = ->
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
     vote = $.parseJSON(xhr.responseText)
-    $('#answer-' + vote.answer_id + ' #cancel-vote').attr('href','/vote/' + vote.id)
+    $('#answer-' + vote.votable_id + ' #cancel-vote').attr('href','/vote/' + vote.id)
     if vote.weight == 1
-      $('#answer-' + vote.answer_id + ' #set-vote-up').hide()
-      $('#answer-' + vote.answer_id + ' #set-vote-down').show()
-      $('#answer-' + vote.answer_id + ' #cancel-vote').show()
+      $('#answer-' + vote.votable_id + ' #set-vote-up').hide()
+      $('#answer-' + vote.votable_id + ' #set-vote-down').show()
+      $('#answer-' + vote.votable_id + ' #cancel-vote').show()
     else
-      $('#answer-' + vote.answer_id + ' #set-vote-up').show()
-      $('#answer-' + vote.answer_id + ' #set-vote-down').hide()
-      $('#answer-' + vote.answer_id + ' #cancel-vote').show()
+      $('#answer-' + vote.votable_id + ' #set-vote-up').show()
+      $('#answer-' + vote.votable_id + ' #set-vote-down').hide()
+      $('#answer-' + vote.votable_id + ' #cancel-vote').show()
 
   .bind 'ajax:error', (e, xhr, status, error) ->
-      alert('Error.')
-      #errors = $.parseJSON(xhr.responseText)
+      #alert('Error.')
+      errors = $.parseJSON(xhr.responseText)
+      errors.each(index, error) ->
+        $('#answer-' + vote.votable_id).prepend(error)
 
 
   $('a.cancel-vote').bind 'ajax:success', (e, data, status, xhr) ->

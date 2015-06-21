@@ -5,7 +5,7 @@ div.answer id="answer-#{answer.id}"
         = render partial: 'questions/best_label', locals: {answer: answer}
     .col-md-5
       p.rating.pull-right
-        = render partial: 'answers/rating', locals: {answer: answer}
+        = render partial: 'answers/rating', locals: {votable: answer}
   p.answer-body
     =answer.body
     - if answer.attachments.any?

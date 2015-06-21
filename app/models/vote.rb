@@ -1,10 +1,9 @@
 class Vote < ActiveRecord::Base
 
   belongs_to :user
-  belongs_to :answer
+  belongs_to :votable, polymorphic: true
 
-  validates :user_id, :answer_id, :weight, presence: true
-  validates :user_id, uniqueness: {scope: :answer_id}
-
+  validates :user_id, :votable_id, :votable_type, :weight, presence: true
+  validates :user_id, uniqueness: { scope: [:votable_id, :votable_type] }
 
 end

@@ -2,7 +2,7 @@ class VotesController < ApplicationController
   before_action :authenticate_user!
 
   def set_vote
-    @vote = Vote.find_or_create_by(answer_id: params[:answer_id], user_id: current_user.id)
+    @vote = Vote.find_or_create_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
     respond_to do |format|
       if @vote.update(weight: params[:weight])
         format.json { render json: @vote}
@@ -15,10 +15,11 @@ class VotesController < ApplicationController
 
   def destroy
     @vote = Vote.find(params[:id])
-    answer_id = @vote.answer_id
+    votable_id = @vote.votable_id
+    votable_type = @vote.votable_type
     respond_to do |format|
       if @vote.destroy
-        format.json { render json: {id: answer_id} }
+        format.json { render json: {id: votable_id, type: votable_type} }
       else
         format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
       end

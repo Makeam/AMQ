@@ -1,7 +1,7 @@
 .rating-sum
-  = answer.rating
+  = votable.rating
 .links
-  - vote = answer.user_vote(current_user)
+  - vote = votable.user_vote(current_user)
   - if !vote.nil?
     - vote_id = vote.id
     - if vote.weight == 1
@@ -18,6 +18,6 @@
     - visible_down = ''
     - visible_cancel = 'display: none;'
 
-  = link_to 'up', set_vote_path(answer_id: answer.id, weight: 1), method: :patch, remote: true, class: 'set-vote butt btn btn-xs btn-default', id:'set-vote-up', style: visible_up
-  = link_to 'down', set_vote_path(answer_id: answer.id, weight: -1), method: :patch, remote: true, class: 'set-vote butt btn btn-xs btn-default', id:'set-vote-down', style: visible_down
+  = link_to 'up',   set_vote_path(votable_id: votable.id, votable_type: votable.class, weight:  1), method: :patch, remote: true, class: 'set-vote butt btn btn-xs btn-default', id:'set-vote-up', style: visible_up
+  = link_to 'down', set_vote_path(votable_id: votable.id, votable_type: votable.class, weight: -1), method: :patch, remote: true, class: 'set-vote butt btn btn-xs btn-default', id:'set-vote-down', style: visible_down
   = link_to 'cancel my vote', "/vote/#{vote_id}", method: :delete, remote: true, class: 'cancel-vote butt btn btn-xs btn-default', id:'cancel-vote', style: visible_cancel

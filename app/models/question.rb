@@ -4,6 +4,8 @@ class Question < ActiveRecord::Base
   has_many :answers, -> { order "best DESC" },
            dependent: :destroy
 
+  has_many :votes, as: :votable, dependent: :destroy
+
   has_many :attachments, as: :attachable, dependent: :destroy
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
