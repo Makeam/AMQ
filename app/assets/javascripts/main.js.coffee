@@ -27,16 +27,19 @@ ready = ->
   #JSON
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
-    vote = $.parseJSON(xhr.responseText)
-    $('#answer-' + vote.votable_id + ' #cancel-vote').attr('href','/vote/' + vote.id)
-    if vote.weight == 1
-      $('#answer-' + vote.votable_id + ' #set-vote-up').hide()
-      $('#answer-' + vote.votable_id + ' #set-vote-down').show()
-      $('#answer-' + vote.votable_id + ' #cancel-vote').show()
+    response = $.parseJSON(xhr.responseText)
+
+    $('#answer-' + response.vote.votable_id + ' #cancel-vote').attr('href','/vote/' + response.vote.id)
+    $('#answer-' + response.vote.votable_id + ' .rating-sum').html(response.rating)
+
+    if response.vote.weight == 1
+      $('#answer-' + response.vote.votable_id + ' #set-vote-up').hide()
+      $('#answer-' + response.vote.votable_id + ' #set-vote-down').show()
+      $('#answer-' + response.vote.votable_id + ' #cancel-vote').show()
     else
-      $('#answer-' + vote.votable_id + ' #set-vote-up').show()
-      $('#answer-' + vote.votable_id + ' #set-vote-down').hide()
-      $('#answer-' + vote.votable_id + ' #cancel-vote').show()
+      $('#answer-' + response.vote.votable_id + ' #set-vote-up').show()
+      $('#answer-' + response.vote.votable_id + ' #set-vote-down').hide()
+      $('#answer-' + response.vote.votable_id + ' #cancel-vote').show()
 
   .bind 'ajax:error', (e, xhr, status, error) ->
       #alert('Error.')
@@ -46,13 +49,17 @@ ready = ->
 
 
   $('a.cancel-vote').bind 'ajax:success', (e, data, status, xhr) ->
-    vote = $.parseJSON(xhr.responseText)
-    $('#answer-' + vote.id + ' #set-vote-up').show()
-    $('#answer-' + vote.id + ' #set-vote-down').show()
-    $('#answer-' + vote.id + ' #cancel-vote').hide()
+    response = $.parseJSON(xhr.responseText)
+    $('#answer-' + response.id + ' #set-vote-up').show()
+    $('#answer-' + response.id + ' #set-vote-down').show()
+    $('#answer-' + response.id + ' #cancel-vote').hide()
+    $('#answer-' + response.id + ' .rating-sum').html(response.rating)
 
   .bind 'ajax:error', (e, data, status, xhr) ->
-    alert('Error canceling.')
+    #alert('Error canceling.')
+    errors = $.parseJSON(xhr.responseText)
+    errors.each(index, error) ->
+      $('#answer-' + vote.votable_id).prepend(error)
 
 #  Здесь могут быть другие обработчики событий и прочий код
 
