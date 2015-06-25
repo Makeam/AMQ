@@ -1,3 +1,3 @@
 
 json.vote @vote
-json.rating @vote.votable.rating
+json.rating @vote.votable.rating!

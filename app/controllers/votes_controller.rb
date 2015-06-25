@@ -19,7 +19,7 @@ class VotesController < ApplicationController
     votable_type = @vote.votable_type
     respond_to do |format|
       if @vote.destroy
-        format.json { render json: {id: votable.id, type: votable_type, rating: votable.rating } }
+        format.json { render json: {id: votable.id, type: votable_type, rating: votable.rating! } }
       else
         format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
       end

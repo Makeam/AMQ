@@ -1,4 +1,6 @@
 h1= question.title
+p.rating.pull-right
+  = render partial: 'answers/rating', locals: {votable: question}
 p.question-body-text= question.body
 .question-attachments
   - question.attachments.each do |a|

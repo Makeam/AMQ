@@ -1,8 +1,10 @@
 class Answer < ActiveRecord::Base
 
+  include Votable
+
   belongs_to :question
   belongs_to :user
-  has_many :votes, as: :votable, dependent: :destroy
+
 
   has_many :attachments, as: :attachable, dependent: :destroy
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
@@ -18,16 +20,5 @@ class Answer < ActiveRecord::Base
     end
   end
 
-  def user_vote(user)
-    self.votes.find_by(user_id: user.id)
-  end
-
-  def rating
-    sum = 0
-    self.votes.find_each do |v|
-      sum += v.weight
-    end
-    return sum
-  end
 
 end
