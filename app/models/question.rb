@@ -14,8 +14,4 @@ class Question < ActiveRecord::Base
   validates :title, length:{ in: 10..256 }
   validates :body, length:{ in: 5..3000 }
 
-  def user_vote(user)
-    self.votes.find_by(user_id: user.id)
-  end
-
 end

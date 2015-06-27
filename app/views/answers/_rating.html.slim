@@ -1,23 +1,38 @@
 .rating-sum
   = votable.rating
 .links
-  - vote = votable.user_vote(current_user)
-  - if !vote.nil?
-    - vote_id = vote.id
-    - if vote.weight == 1
-      - visible_up = 'display: none;'
+  - if user_signed_in? and is_not_owner_of?(votable)
+    - vote = votable.user_vote(current_user)
+    - if !vote.nil?
+      - vote_id = vote.id
+      - visible_up = ''
       - visible_down = ''
       - visible_cancel = ''
-    -else
-      - visible_up = ''
-      - visible_down = 'display: none;'
-      - visible_cancel = ''
-  -else
-    - vote_id = ''
-    - visible_up = ''
-    - visible_down = ''
-    - visible_cancel = 'display: none;'
 
-  = link_to 'up',   set_vote_path(votable_id: votable.id, votable_type: votable.class, weight:  1), method: :patch, remote: true, class: 'set-vote butt btn btn-xs btn-default', id:'set-vote-up', style: visible_up
-  = link_to 'down', set_vote_path(votable_id: votable.id, votable_type: votable.class, weight: -1), method: :patch, remote: true, class: 'set-vote butt btn btn-xs btn-default', id:'set-vote-down', style: visible_down
-  = link_to 'cancel my vote', "/vote/#{vote_id}", method: :delete, remote: true, class: 'cancel-vote butt btn btn-xs btn-default', id:'cancel-vote', style: visible_cancel
+      - if vote.weight == 1
+        - visible_up = 'display: none;'
+      -else
+        - visible_down = 'display: none;'
+    -else
+      - vote_id = ''
+      - visible_cancel = 'display: none;'
+
+    /Create all links for manage them via JS
+    = link_to 'up',   set_vote_path(votable_id: votable.id, votable_type: votable.class, weight:  1),
+      method: :patch,
+      remote: true,
+      id:'set-vote-up',
+      class: 'set-vote butt btn btn-xs btn-default',
+      style: visible_up
+    = link_to 'down', set_vote_path(votable_id: votable.id, votable_type: votable.class, weight: -1),
+      method: :patch,
+      remote: true,
+      id:'set-vote-down',
+      class: 'set-vote butt btn btn-xs btn-default',
+      style: visible_down
+    = link_to 'cancel my vote', "/vote/#{vote_id}",
+      method: :delete,
+      remote: true,
+      id:'cancel-vote',
+      class: 'cancel-vote butt btn btn-xs btn-default',
+      style: visible_cancel

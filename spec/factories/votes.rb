@@ -1,8 +1,15 @@
 FactoryGirl.define do
-  factory :vote do
-    user_id 1
-answer_id 1
-weight 1
+
+  factory :question_vote, class: 'Vote' do
+    user
+    votable { |a| a.association(:question) }
+    weight 0
+  end
+
+  factory :answer_vote, class: 'Vote' do
+    user
+    votable { |a| a.association(:answer) }
+    weight 0
   end
 
 end

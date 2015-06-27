@@ -1,14 +1,18 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_votable, only: [:set_vote]
 
   def set_vote
-    @vote = Vote.find_or_create_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
-    respond_to do |format|
+    if !@votable.blank? and is_not_owner_of?(@votable)
+      @vote = Vote.find_or_create_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
+
       if @vote.update(weight: params[:weight])
-        format.json #{ render json: @vote}
+        @vote.votable.rating!
       else
-        format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
+        render json: @vote.errors.full_messages, status: :unprocessable_entity
       end
+    else
+      render json: { status: :forbidden }
     end
   end
 
@@ -17,13 +21,25 @@ class VotesController < ApplicationController
     @vote = Vote.find(params[:id])
     votable = @vote.votable
     votable_type = @vote.votable_type
+
     respond_to do |format|
-      if @vote.destroy
-        format.json { render json: {id: votable.id, type: votable_type, rating: votable.rating! } }
+      if is_not_owner_of?(votable)
+        if @vote.destroy
+          format.json { render json: {id: votable.id, type: votable_type, rating: votable.rating! } }
+        else
+          format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
+        end
       else
-        format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
+        format.json { render json: { status: :forbidden } }
       end
     end
+  end
+
+  private
+
+  def set_votable
+    model_klass = params[:votable_type].classify.constantize
+    @votable = model_klass.find(params[:votable_id])
   end
 
 end
