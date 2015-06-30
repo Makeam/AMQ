@@ -8,12 +8,16 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
     @answer.user_id = current_user.id
-
-    if @answer.save
-      flash[:notice] = 'Your answer successfully created'
-    else
-      flash[:notice] = 'Upss! Can not create Answer.'
+    respond_to do |format|
+      if @answer.save
+        flash[:notice] = 'Your answer successfully created'
+        format.json #{render json: @answer}
+      else
+        flash[:notice] = 'Upss! Can not create Answer.'
+        format.json { render json: @answer.errors.full_messages, status: :unprocessble_entity }
+      end
     end
+
   end
 
   def update

@@ -5,7 +5,8 @@
 
 hr
 - if user_signed_in?
-  = form_for @answer, url: {controller:'answers', action: "create", question_id: @question}, remote: true do |f|
+  .form-errors.text-danger
+  = form_for @answer, url: {controller:'answers', action: "create", question_id: @question}, format:'json',  remote: true, data: {type: :json} do |f|
     .form-group
       =f.label :body
       =f.text_area :body, class:'form-control', rows: '5'
