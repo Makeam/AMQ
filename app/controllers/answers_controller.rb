@@ -21,13 +21,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.user_id == current_user.id
+    if is_owner_of?(@answer)
       @question = Question.find(params[:question_id])
 
-      if @answer.update(answer_params)
-        flash[:notice] = 'Your answer successfully created'
-      else
-        flash[:notice] = 'Upss! Can not create Answer.'
+      respond_to do |format|
+        if @answer.update(answer_params)
+          flash[:notice] = 'Your answer successfully updated'
+          format.json
+        else
+          flash[:notice] = 'Upss! Can not update Answer.'
+          format.json { render json: @answer.errors.full_messages, status: :unprocessble_entity }
+        end
       end
     else
       flash[:notice] = 'You can\'t edit this answer.'
