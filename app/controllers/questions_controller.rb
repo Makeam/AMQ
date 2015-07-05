@@ -8,7 +8,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new(question_id: @question_id)
-    #@question.attachments.build
     @answer.attachments.build
   end
 
@@ -29,14 +28,19 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.user_id == current_user.id
-      if @question.update(question_params)
-        flash[:notice] = 'Your Question successfully updated.'
+    respond_to do |format|
+      if is_owner_of?(@question)
+        if @question.update(question_params)
+          flash[:notice] = 'Your Question successfully updated.'
+          format.json
+        else
+          flash[:notice] = 'Can not update your Question.'
+          format.json {render json: @question.errors.full_messages, status: :unprocessable_entity}
+        end
       else
-        flash[:notice] = 'Can not update your Question.'
+        flash[:notice] = 'You is not owner of this question.'
+        format.json {render json: {}, status: :access_denied}
       end
-    else
-      flash[:notice] = 'You is not owner this question.'
     end
   end
 

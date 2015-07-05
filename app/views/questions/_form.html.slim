@@ -1,4 +1,5 @@
-= form_for question, remote: !question.new_record? do |f|
+- question.new_record? ? (form_params = {remote: false}) : (form_params = {remote: true, format: 'json', data: {type: :json}})
+= form_for question, form_params do |f|
   .form-group
     = f.label :title, 'Title'
     = f.text_field :title, class:'form-control'
