@@ -14,41 +14,46 @@ class AnswersController < ApplicationController
         format.json #{render json: @answer}
       else
         flash[:notice] = 'Upss! Can not create Answer.'
-        format.json { render json: @answer.errors.full_messages, status: :unprocessble_entity }
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
       end
     end
 
   end
 
   def update
-    if is_owner_of?(@answer)
-      @question = Question.find(params[:question_id])
+    respond_to do |format|
+      if is_owner_of?(@answer)
+        @question = Question.find(params[:question_id])
 
-      respond_to do |format|
         if @answer.update(answer_params)
           flash[:notice] = 'Your answer successfully updated'
           format.json
         else
           flash[:notice] = 'Upss! Can not update Answer.'
-          format.json { render json: @answer.errors.full_messages, status: :unprocessble_entity }
+          format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
         end
+      else
+        flash[:notice] = 'You can\'t edit this answer.'
+        format.json { render json: @answer, status: :access_denied }
       end
-    else
-      flash[:notice] = 'You can\'t edit this answer.'
     end
   end
 
   def set_best
-    if @answer.question.user_id == current_user.id
+    respond_to do |format|
       @question = @answer.question
-      if @answer.set_best
-        flash[:notice] = 'You set the answer as Best answer'
+      if is_owner_of?(@question)
+        if @answer.set_best
+          flash[:notice] = 'You set the answer as Best answer'
+          format.json
+        else
+          flash[:notice] = 'Upss! Best answer not set.'
+          format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+        end
       else
-        flash[:notice] = 'Upss! Best answer not set.'
+        flash[:notice] = 'You can\'t set Best answer.'
+        format.json { render json: @answer, status: :access_denied }
       end
-
-    else
-      flash[:notice] = 'You can\'t set Best answer.'
     end
   end
 

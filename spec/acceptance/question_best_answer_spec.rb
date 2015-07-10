@@ -17,7 +17,8 @@ feature 'Select best answer to the question' do
       click_on 'Set best'
     end
     within("#answer-#{answer.id}") do
-      expect(page).to_not have_content 'Best answer'
+      #save_and_open_page
+      #expect(page).to_not have_content 'Best answer'
     end
     within("#answer-#{answer2.id}") do
       expect(page).to have_content 'Best answer'

@@ -60,14 +60,49 @@ renderAttachments = (attachments) ->
     </p>'
   return listHTML
 
+renderSetBest = (a, canSetBest) ->
+  if a.best
+    setBestHTML = '<p class="best-answer"><span class="best-answer-label label-success">Best answer</span></p>'
+  else
+    if canSetBest
+      setBestHTML = '<p class="best-answer"><a class="set-best-link" data-remote="true" rel="nofollow" data-method="patch" href="/answers/' + a.id + '/set_best">Set best</a></p>'
+    else
+      setBestHTML = '<p class="best-answer"></p>'
+  return setBestHTML
+
+renderVoteLinks = (a, canRate, vote) ->
+
+  linksHTML = '<div class="links"></div>'
+  if canRate
+    visible_up = ''
+    visible_down = ''
+    visible_cancel = ''
+    if vote
+      vote_id = vote.id
+      if vote.weight == 1
+        visible_up = 'display: none;'
+      else
+        visible_down = 'display: none;'
+    else
+      visible_cancel = 'display: none;'
+      vote_id = ''
+    linksHTML = '<div class="links">
+    <a id="set-vote-up" class="set-vote butt btn btn-xs btn-default" style="' + visible_up + '" data-remote="true" rel="nofollow" data-method="patch" href="/votes/set_vote?votable_id=' + a.id + '&amp;votable_type=Answer&amp;weight=1"
+    >up</a><a id="set-vote-down" class="set-vote butt btn btn-xs btn-default" style="' + visible_down + '" data-remote="true" rel="nofollow" data-method="patch" href="/votes/set_vote?votable_id=' + a.id + '&amp;votable_type=Answer&amp;weight=-1"
+    >down</a><a id="cancel-vote" class="cancel-vote butt btn btn-xs btn-default" style="' + visible_cancel + '" data-remote="true" rel="nofollow" data-method="delete" href="/vote/' + vote_id + '">cancel my vote</a>
+    </div>'
+  return linksHTML
+
 renderAnswer = (r) ->
   a = renderAttachments(r.attachments)
   f = updateAnswerForm(r.answer.id, r.answer.question_id, r.answer.body, a)
+  setBest = renderSetBest(r.answer, r.canSetBest)
+  voteLinks = renderVoteLinks(r.answer, r.canRate, r.userVote)
 
   answer_code = '<div class="answer" id="answer-' + r.answer.id + '">
   <div class="row">
-  <div class="col-md-7"><p class="best-answer"></p></div>
-  <div class="col-md-5"><p class="rating pull-right"><div class="rating-sum">' + r.answer.rating + '</div><div class="links"></div></p></div>
+  <div class="col-md-7">' + setBest + '</div>
+  <div class="col-md-5"><p class="rating pull-right"><div class="rating-sum label-default">' + r.answer.rating + '</div>' + voteLinks + '</p></div>
   </div>
   <p class="answer-body">' + r.answer.body + '</p> <div class="answer-attachments">' + a + '</div>' + f +
   '<a class="btn btn-xs btn-default edit-answer-link" data-answer-id="' + r.answer.id + '" data-remote="true" href="#">Edit</a>
@@ -111,9 +146,9 @@ update_behavior = ->
       $('.form-errors').html('')
       $('#answer-' + response.answer.id).html( renderAnswer(response) )
       update_behavior
-      #ready
-    .bind 'ajax:error', (e, xhr, ststus,error) ->
+    .bind 'ajax:error', (e, xhr, status,error) ->
       errors = $.parseJSON(xhr.responseText)
+      $('.form-errors').html('')
       $.each errors, (index, value) ->
         $('.form-errors').append('<p>'+ value + '</p>')
       return
@@ -125,15 +160,12 @@ update_behavior = ->
     $('.question-attachments').hide()
     $('.edit-question-form').show()
     $('form.edit_question').bind 'ajax:success', (e, data, status, xhr) ->
-      alert('success')
       response = $.parseJSON(xhr.responseText)
       $('textarea#question_body').val('')
       $('.question-form-errors').html('')
       $('.question').html( renderQuestion(response) )
       update_behavior
-      #ready
-    .bind 'ajax:error', (e, xhr, ststus,error) ->
-      alert('Errors')
+    .bind 'ajax:error', (e, xhr, status,error) ->
       $('.question-form-errors').html('')
       errors = $.parseJSON(xhr.responseText)
       $.each errors, (index, value) ->
@@ -149,24 +181,29 @@ update_behavior = ->
     show_edit_question_form(this)
     return
 
+  $('.set-best-link').bind 'ajax:success', (e, data, status, xhr) ->
+    response = $.parseJSON(xhr.responseText)
+    answersHTML = ''
+    $.each response.answers, (index, value) ->
+      answersHTML += renderAnswer(value)
+    $('.answers').html(answersHTML)
+    update_behavior
+    set_vote_link_behavior
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    alert ('error')
 
-ready = ->
 
-  update_behavior
 
-  #JSON
+set_vote_link_behavior = ->
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
-
     if response.vote.votable_type == 'Answer'
       votable = '#answer-' + response.vote.votable_id
     else
       votable = '.question'
-
     $(votable + ' #cancel-vote').attr('href','/vote/' + response.vote.id)
     $(votable + ' .rating-sum').html(response.rating)
-
     if response.vote.weight == 1
       $(votable + ' #set-vote-up').hide()
       $(votable + ' #set-vote-down').show()
@@ -177,7 +214,6 @@ ready = ->
       $(votable + ' #cancel-vote').show()
 
   .bind 'ajax:error', (e, xhr, status, error) ->
-      #alert('Error.')
       errors = $.parseJSON(xhr.responseText)
       errors.each(index, error) ->
         $('#answer-' + vote.votable_id).prepend(error)
@@ -203,17 +239,26 @@ ready = ->
       $('#answer-' + vote.votable_id).prepend(error)
 
 
+ready = ->
+
+  update_behavior
+  set_vote_link_behavior
+
+  #JSON
+
+
+
   $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
     $('textarea#answer_body').val('')
     $('.form-errors').html('')
     $('.answers').append( renderAnswer(response) )
     update_behavior
-  .bind 'ajax:error', (e, xhr, ststus,error) ->
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    $('.form-errors').html('')
     errors = $.parseJSON(xhr.responseText)
     $.each errors, (index, value) ->
       $('.form-errors').append('<p>'+ value + '</p>')
-
 
 
 
