@@ -13,12 +13,13 @@ feature 'Select best answer to the question' do
     within("#answer-#{answer.id}") do
       click_on 'Set best'
     end
+    sleep(1)
     within("#answer-#{answer2.id}") do
       click_on 'Set best'
     end
+    sleep(1)
     within("#answer-#{answer.id}") do
-      #save_and_open_page
-      #expect(page).to_not have_content 'Best answer'
+      expect(page).to_not have_content 'Best answer'
     end
     within("#answer-#{answer2.id}") do
       expect(page).to have_content 'Best answer'

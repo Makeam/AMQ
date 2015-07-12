@@ -21,18 +21,21 @@
     = link_to 'up',   set_vote_path(votable_id: votable.id, votable_type: votable.class, weight:  1),
       method: :patch,
       remote: true,
+      format: :json,
       id:'set-vote-up',
       class: 'set-vote butt btn btn-xs btn-default',
       style: visible_up
     = link_to 'down', set_vote_path(votable_id: votable.id, votable_type: votable.class, weight: -1),
       method: :patch,
       remote: true,
+      format: :json,
       id:'set-vote-down',
       class: 'set-vote butt btn btn-xs btn-default',
       style: visible_down
     = link_to 'cancel my vote', "/vote/#{vote_id}",
       method: :delete,
       remote: true,
+      format: :json,
       id:'cancel-vote',
       class: 'cancel-vote butt btn btn-xs btn-default',
       style: visible_cancel

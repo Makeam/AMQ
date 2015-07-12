@@ -137,7 +137,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'Answer\'s owner can edit answer' do
       sign_in(owner)
-      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :js
+      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :json
       question.reload
       expect(question.title).to eq 'New title question'
       expect(question.body).to eq 'New body question'
@@ -146,14 +146,14 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'Not owner can\'t edit answer' do
       sign_in(user2)
-      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :js
+      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :json
       question.reload
       expect(question.title).to_not eq 'New title question'
       expect(question.body).to_not eq 'New body question'
     end
 
     it 'Non-authenticated user can\'t edit answer' do
-      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :js
+      patch :update, id: question, question: {title:'New title question',body:'New body question'}, format: :json
       question.reload
       expect(question.title).to_not eq 'New title question'
       expect(question.body).to_not eq 'New body question'

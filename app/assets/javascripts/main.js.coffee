@@ -133,6 +133,7 @@ renderQuestion = (r) ->
   return question_code
 
 update_behavior = ->
+  votelink_behavior()
 
   show_edit_form = (th) ->
     $(th).hide()
@@ -188,15 +189,15 @@ update_behavior = ->
       answersHTML += renderAnswer(value)
     $('.answers').html(answersHTML)
     update_behavior
-    set_vote_link_behavior
   .bind 'ajax:error', (e, xhr, status, error) ->
     alert ('error')
 
 
 
-set_vote_link_behavior = ->
+votelink_behavior = ->
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
+    alert('success')
     response = $.parseJSON(xhr.responseText)
     if response.vote.votable_type == 'Answer'
       votable = '#answer-' + response.vote.votable_id
@@ -240,12 +241,7 @@ set_vote_link_behavior = ->
 
 
 ready = ->
-
   update_behavior
-  set_vote_link_behavior
-
-  #JSON
-
 
 
   $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
