@@ -4,7 +4,7 @@ class VotesController < ApplicationController
 
   def set_vote
     if !@votable.blank? and is_not_owner_of?(@votable)
-      @vote = Vote.find_or_create_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
+      @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
 
       if @vote.update(weight: params[:weight])
         @vote.votable.rating!

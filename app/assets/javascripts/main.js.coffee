@@ -197,7 +197,6 @@ update_behavior = ->
 votelink_behavior = ->
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
-    alert('success')
     response = $.parseJSON(xhr.responseText)
     if response.vote.votable_type == 'Answer'
       votable = '#answer-' + response.vote.votable_id
@@ -234,7 +233,6 @@ votelink_behavior = ->
     $(votable + ' .rating-sum').html(response.rating)
 
   .bind 'ajax:error', (e, xhr, status, error) ->
-    #alert('Error canceling.')
     errors = $.parseJSON(xhr.responseText)
     $.each errors,(index, error) ->
       $('#answer-' + vote.votable_id).prepend(error)

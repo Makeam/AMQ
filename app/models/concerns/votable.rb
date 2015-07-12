@@ -9,10 +9,7 @@ module Votable
   end
 
   def rating!
-    sum = 0
-    self.votes.find_each do |v|
-      sum += v.weight
-    end
+    sum = self.votes.sum(:weight)
     self.update(rating: sum)
     return sum
   end
