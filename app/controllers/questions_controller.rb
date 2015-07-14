@@ -28,19 +28,16 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if is_owner_of?(@question)
-        if @question.update(question_params)
-          flash[:notice] = 'Your Question successfully updated.'
-          format.json
-        else
-          flash[:notice] = 'Can not update your Question.'
-          format.json {render json: @question.errors.full_messages, status: :unprocessable_entity}
-        end
+    if is_owner_of?(@question)
+      if @question.update(question_params)
+        flash[:notice] = 'Your Question successfully updated.'
       else
-        flash[:notice] = 'You is not owner of this question.'
-        format.json {render json: {}, status: :access_denied}
+        flash[:notice] = 'Can not update your Question.'
+        render json: @question.errors.full_messages, status: :unprocessable_entity
       end
+    else
+      flash[:notice] = 'You is not owner of this question.'
+      render json: {}, status: :access_denied
     end
   end
 

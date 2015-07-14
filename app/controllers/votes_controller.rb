@@ -22,16 +22,14 @@ class VotesController < ApplicationController
     votable = @vote.votable
     votable_type = @vote.votable_type
 
-    respond_to do |format|
-      if is_not_owner_of?(votable)
-        if @vote.destroy
-          format.json { render json: {id: votable.id, type: votable_type, rating: votable.rating! } }
-        else
-          format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
-        end
+    if is_not_owner_of?(votable)
+      if @vote.destroy
+        render json: {id: votable.id, type: votable_type, rating: votable.rating! }
       else
-        format.json { render json: { status: :forbidden } }
+        render json: @vote.errors.full_messages, status: :unprocessable_entity
       end
+    else
+      render json: { status: :forbidden }
     end
   end
 

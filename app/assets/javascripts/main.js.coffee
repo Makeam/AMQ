@@ -37,8 +37,7 @@ updateQuestionForm = (id, title, body, attachments) ->
   <label for="question_body">Body</label><textarea class="form-control" rows="5" name="question[body]" id="question_body">' + body + '</textarea>
   </div>
   <div class="question-attachments-fields">' + attachments +
-  '<input type="hidden" value="88" name="question[attachments_attributes][0][id]" id="question_attachments_attributes_0_id" />
-  <div class="add-file-link">
+  '<div class="add-file-link">
   <a class="add_fields" data-association="attachment" data-associations="attachments" data-association-insertion-template="&lt;div class=&quot;nested-fields&quot;&gt;
   &lt;div class=&quot;form-group&quot;&gt;
   &lt;label for=&quot;question_attachments_attributes_new_attachments_file&quot;&gt;Attach file&lt;/label&gt;&lt;input type=&quot;file&quot; name=&quot;question[attachments_attributes][new_attachments][file]&quot; id=&quot;question_attachments_attributes_new_attachments_file&quot; /&gt;
