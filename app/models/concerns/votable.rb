@@ -9,9 +9,19 @@ module Votable
   end
 
   def rating!
-    sum = self.votes.sum(:weight)
-    self.update(rating: sum)
-    return sum
+    #sum = self.votes.sum(:weight)
+    #self.update(rating: sum)
+    #
+    #self.votes.find_each( batch_size: 1 ) do | vote |
+    #  self.increment!(:rating, vote.weight)
+    #end
+    #
+    #return self.rating
   end
 
+  #protected
+  #
+  #def update_rating
+  #  self.votable.increment!(:rating, self.weight)
+  #end
 end

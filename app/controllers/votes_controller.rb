@@ -7,7 +7,7 @@ class VotesController < ApplicationController
       @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
 
       if @vote.update(weight: params[:weight])
-        @vote.votable.rating!
+        #@vote.votable.rating!
       else
         render json: @vote.errors.full_messages, status: :unprocessable_entity
       end
@@ -24,7 +24,7 @@ class VotesController < ApplicationController
 
     if is_not_owner_of?(votable)
       if @vote.destroy
-        render json: {id: votable.id, type: votable_type, rating: votable.rating! }
+        render json: {id: votable.id, type: votable_type, rating: votable.rating }
       else
         render json: @vote.errors.full_messages, status: :unprocessable_entity
       end
