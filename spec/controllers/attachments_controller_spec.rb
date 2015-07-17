@@ -17,10 +17,10 @@ RSpec.describe AttachmentsController, type: :controller do
         sign_in(owner)
         expect{ delete :destroy, id: question.attachments.first.id, format: :js }.to change(question.attachments, :count).by(-1)
       end
-      it "should render destroy.js view" do
+      it "Response status: 200" do
         sign_in(owner)
         delete :destroy, id: question.attachments.first.id, format: :js
-        expect(response).to render_template 'destroy'
+        expect(response.status).to eq 200
       end
     end
 
@@ -29,10 +29,10 @@ RSpec.describe AttachmentsController, type: :controller do
         sign_in(user)
         expect{ delete :destroy, id: question.attachments.first.id, format: :js }.to change(question.attachments, :count).by(0)
       end
-      it "should render destroy.js view" do
+      it "Response status: Forbidden" do
         sign_in(user)
         delete :destroy, id: question.attachments.first.id, format: :js
-        expect(response).to render_template 'destroy'
+        expect(response.status).to be_forbidden
       end
     end
 
@@ -41,10 +41,10 @@ RSpec.describe AttachmentsController, type: :controller do
         sign_in(owner)
         expect{ delete :destroy, id: answer.attachments.first.id, format: :js }.to change(answer.attachments, :count).by(-1)
       end
-      it "should render destroy.js view" do
+      it "Response status: 200" do
         sign_in(owner)
         delete :destroy, id: answer.attachments.first.id, format: :js
-        expect(response).to render_template 'destroy'
+        expect(response.status).to be_success
       end
     end
 
@@ -53,10 +53,10 @@ RSpec.describe AttachmentsController, type: :controller do
         sign_in(user)
         expect{ delete :destroy, id: answer.attachments.first.id, format: :js }.to change(answer.attachments, :count).by(0)
       end
-      it "should render destroy.js view" do
+      it "Response status: Forbidden" do
         sign_in(user)
         delete :destroy, id: answer.attachments.first.id, format: :js
-        expect(response).to render_template 'destroy'
+        expect(response.status).to be_forbidden
       end
     end
   end

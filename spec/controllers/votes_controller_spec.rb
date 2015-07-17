@@ -6,21 +6,20 @@ RSpec.describe VotesController, type: :controller do
     let(:owner){ create(:user)}
     let(:user){ create(:user)}
     let(:user2){ create(:user)}
-    let(:question){ create(:question, user: owner)}
-    let(:answer){ create(:answer, user: owner)}
+    let!(:question){ create(:question, user: owner)}
+    let!(:answer){ create(:answer, user: owner)}
 
     it 'Create new vote ' do
       sign_in(user)
       expect{ patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json }.to change(Vote, :count).by(1)
-      answer.reload
-      expect(answer.rating).to eq 1
     end
 
     it 'Set Vote Up to Answer' do
       sign_in(user)
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
-      answer.reload
-      expect(answer.rating).to eq 1
+      expect{ patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json}.to change { answer.reload.rating }.by(1)
+      #patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      #answer.reload
+      #expect(answer.rating).to eq 1
     end
 
     it 'Set Vote Down to Answer' do
@@ -38,7 +37,7 @@ RSpec.describe VotesController, type: :controller do
       patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
 
       answer.reload
-      expect(answer.rating!).to eq 2
+      expect(answer.rating).to eq 2
     end
 
      it 'Set Vote Up to Question' do

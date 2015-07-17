@@ -1,5 +1,5 @@
 h1= question.title
-p.rating
+.rating
   = render partial: 'answers/rating', locals: {votable: question}
 .clearfix
 p.question-body-text= question.body
@@ -7,7 +7,7 @@ p.question-body-text= question.body
   - question.attachments.each do |a|
     p id="attach-#{a.id}"
       => link_to a.file.filename, a.file.url
-      =  (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default') if is_owner_of?(question)
+      =  (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default delete-attach') if is_owner_of?(question)
 - if is_owner_of?(question)
   .question-form-errors
   .edit-question-form

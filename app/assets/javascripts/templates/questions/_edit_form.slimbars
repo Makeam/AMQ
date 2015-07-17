@@ -1,0 +1,27 @@
+form class="edit_question" id="edit_question" enctype="multipart/form-data" action="/questions/{{ question.id }}" data-type="json" accept-charset="UTF-8" data-remote="true" method="post"
+  input name="utf8" type="hidden" value="&#x2713;"
+  input type="hidden" name="_method" value="patch"
+  .form-group
+    label for="question_title" Title
+    input class="form-control" type="text" value="{{ question.title }}" name="question[title]" id="question_title"
+  .form-group
+    label for="question_body" Body
+    textarea class="form-control" rows="5" name="question[body]" id="question_body" {{question.body}}
+  .question-attachments-fields
+    | {{> answers/_attachments }}
+    .add-file-link
+      a.add_fields[
+      data-association="attachment"
+      data-associations="attachments"
+      data-association-insertion-template="
+      <div class='nested-fields'>
+      <div class='form-group'>
+      <label for='question_attachments_attributes_new_attachments_file'> Attach file </label>
+      <input type='file' name='question[attachments_attributes][new_attachments][file]' id='question_attachments_attributes_new_attachments_file' />
+      </div>
+      <input type='hidden' name='question[attachments_attributes][new_attachments][_destroy]' id='question_attachments_attributes_new_attachments__destroy' value='false' />
+      <a class='remove_fields dynamic' href='#'> remove file </a>
+      </div>"
+      href="#"] Add file
+  .form-group
+    input type="submit" name="commit" value="Save" class="btn btn-primary"

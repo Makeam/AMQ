@@ -7,3 +7,7 @@ json.attachments @answer.attachments do |attachment|
     json.url attachment.file.url
     json.filename attachment.file.filename
 end
+
+json.rating @answer.rating
+json.votable_id @answer.id
+json.votable_type 'Answer'

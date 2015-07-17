@@ -1,0 +1,18 @@
+h1
+  | {{question.title}}
+.rating
+  | {{> answers/_rating}}
+.clearfix
+p.question-body-text
+  |{{question.body}}
+.question-attachments
+  | {{> answers/_attachments }}
+.question-form-errors
+.edit-question-form
+  | {{> questions/_edit_form }}
+p
+  a.btn.btn-xs.btn-default.edit-question-link data-remote="true" href="#" Edit
+  a.btn.btn-xs.btn-default href="questions/{{question.id}}" method="delete" Delete my question
+p: small
+  |{{email}}
+hr

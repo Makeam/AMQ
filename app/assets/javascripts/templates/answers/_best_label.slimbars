@@ -1,0 +1,7 @@
+| {{#if answer.best }}
+span.best-answer-label.label-success Best answer
+| {{else}}
+    {{#if canSetBest}}
+a.set-best-link href="/answers/{{ answer.id }}/set_best" data-remote="true" rel="nofollow" data-method="patch" Set best
+|   {{/if}}
+| {{/if}}
