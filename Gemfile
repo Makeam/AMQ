@@ -65,6 +65,7 @@ group :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'poltergeist'
+  gem 'test_after_commit'
   #gem 'selenium-webdriver'
   #gem 'capybara-webkit'
 end

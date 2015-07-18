@@ -10,11 +10,11 @@ class AttachmentsController < ApplicationController
         render json: {id: params[:id]}
       else
         flash[:notice] = 'File can\'t be deleted.'
-        render json: @attachment.errors.full_messaages, status: 500
+        render json: @attachment.errors.full_messages, status: 500
       end
     else
       flash[:notice] = 'File can\'t be deleted because you are not owner'
-      render json: params[:id], status: :forbidden
+      render json: {id: params[:id]}, status: :forbidden
     end
   end
 

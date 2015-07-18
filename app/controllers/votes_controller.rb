@@ -1,8 +1,8 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_votable, only: [:set_vote]
+  before_action :load_votable, only: [:voting]
 
-  def set_vote
+  def voting
     if !@votable.blank? and is_not_owner_of?(@votable)
       @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
 
@@ -39,7 +39,7 @@ class VotesController < ApplicationController
     params[:weight].to_i != @vote.weight
   end
 
-  def set_votable
+  def load_votable
     model_klass = params[:votable_type].classify.constantize
     @votable = model_klass.find(params[:votable_id])
   end

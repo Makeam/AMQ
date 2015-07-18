@@ -32,7 +32,7 @@ RSpec.describe AttachmentsController, type: :controller do
       it "Response status: Forbidden" do
         sign_in(user)
         delete :destroy, id: question.attachments.first.id, format: :js
-        expect(response.status).to be_forbidden
+        expect(response.status).to eq 403
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe AttachmentsController, type: :controller do
       it "Response status: 200" do
         sign_in(owner)
         delete :destroy, id: answer.attachments.first.id, format: :js
-        expect(response.status).to be_success
+        expect(response.status).to eq 200
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe AttachmentsController, type: :controller do
       it "Response status: Forbidden" do
         sign_in(user)
         delete :destroy, id: answer.attachments.first.id, format: :js
-        expect(response.status).to be_forbidden
+        expect(response.status).to  eq 403
       end
     end
   end

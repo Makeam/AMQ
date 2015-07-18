@@ -217,6 +217,8 @@ GEM
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
     temple (0.7.5)
+    test_after_commit (0.4.1)
+      activerecord (>= 3.2)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -270,6 +272,7 @@ DEPENDENCIES
   shoulda-matchers
   slim-rails
   spring
+  test_after_commit
   therubyracer
   turbolinks
   twitter-bootstrap-rails!

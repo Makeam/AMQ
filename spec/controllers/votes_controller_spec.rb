@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe VotesController, type: :controller do
 
-  describe "PATCH #set_vote" do
+  describe "PATCH #voting" do
     let(:owner){ create(:user)}
     let(:user){ create(:user)}
     let(:user2){ create(:user)}
@@ -11,30 +11,30 @@ RSpec.describe VotesController, type: :controller do
 
     it 'Create new vote ' do
       sign_in(user)
-      expect{ patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json }.to change(Vote, :count).by(1)
+      expect{ patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json }.to change(Vote, :count).by(1)
     end
 
     it 'Set Vote Up to Answer' do
       sign_in(user)
-      expect{ patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json}.to change { answer.reload.rating }.by(1)
-      #patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      expect{ patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json}.to change { answer.reload.rating }.by(1)
+      #patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
       #answer.reload
       #expect(answer.rating).to eq 1
     end
 
     it 'Set Vote Down to Answer' do
       sign_in(user)
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: -1, format: :json
+      patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: -1, format: :json
       answer.reload
       expect(answer.rating).to eq -1
     end
 
     it 'Set 2 votes Up to Answer' do
       sign_in(user)
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
       sign_out(user)
       sign_in(user2)
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
 
       answer.reload
       expect(answer.rating).to eq 2
@@ -42,32 +42,32 @@ RSpec.describe VotesController, type: :controller do
 
      it 'Set Vote Up to Question' do
       sign_in(user)
-      patch :set_vote, votable_id: question.id, votable_type: 'Question', weight: 1, format: :json
+      patch :voting, votable_id: question.id, votable_type: 'Question', weight: 1, format: :json
       question.reload
       expect(question.rating).to eq 1
     end
 
     it 'Set Vote Down to Question' do
       sign_in(user)
-      patch :set_vote, votable_id: question.id, votable_type: 'Question', weight: -1, format: :json
+      patch :voting, votable_id: question.id, votable_type: 'Question', weight: -1, format: :json
       question.reload
       expect(question.rating).to eq -1
     end
 
     it 'The User can\'t set 2 votes Up to the Answer' do
       sign_in(user)
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
 
       answer.reload
-      expect(answer.rating!).to_not eq 2
+      expect(answer.rating).to_not eq 2
     end
 
     it 'The User can\'t set Vote to his Answer' do
       sign_in(owner)
-      patch :set_vote, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
+      patch :voting, votable_id: answer.id, votable_type: 'Answer', weight: 1, format: :json
       answer.reload
-      expect(answer.rating!).to eq 0
+      expect(answer.rating).to eq 0
     end
 
   end

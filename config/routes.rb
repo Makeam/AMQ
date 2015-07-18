@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   delete 'attachment/:id' => 'attachments#destroy', as: :remove_attach
   patch 'answers/:id/set_best' => 'answers#set_best', as: :set_best
-  patch 'votes/set_vote' => 'votes#set_vote', as: :set_vote
+  patch 'votes/set_vote' => 'votes#voting', as: :set_vote
   delete 'vote/:id' => 'votes#destroy', as: :cancel_vote
 
   # The priority is based upon order of creation: first created -> highest priority.
