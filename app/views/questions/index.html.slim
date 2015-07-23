@@ -3,11 +3,13 @@ h1 Вопросы
 hr
 
 - if @questions.any?
-  table.table
+  table.table.questions
     - @questions.each do |q|
       tr
         td= link_to q.title, q
         td= q.user.email
 - else
   p Пока никто не задал ни одного вопроса.
+
+= subscribe_to "/questions"
 

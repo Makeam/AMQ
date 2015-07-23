@@ -136,6 +136,12 @@ ready = ->
     update_behavior
 
 
+  PrivatePub.subscribe '/questions', (data, channel) ->
+    response = $.parseJSON(data['response'])
+    console.log('Новый вопрос: ' + response)
+    $('table.questions').prepend ->
+      HandlebarsTemplates['questions/item_question']( response )
+
 #  Здесь могут быть другие обработчики событий и прочий код
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready

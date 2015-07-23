@@ -24,6 +24,7 @@ class QuestionsController < ApplicationController
     @question.user_id = current_user.id
     if @question.save
       flash[:notice] = 'Your question successfully created.'
+      PrivatePub.publish_to "/questions", response: create_hash
       redirect_to @question
     else
       render :new
@@ -60,6 +61,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def create_hash
+    {question: {title: @question.title, id: @question.id, user_email: @question.user.email}}.to_json
+  end
 
   def load_question
     @question = Question.find(params[:id])

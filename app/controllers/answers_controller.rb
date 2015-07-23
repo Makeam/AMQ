@@ -10,7 +10,7 @@ class AnswersController < ApplicationController
     @answer.user_id = current_user.id
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
-      PrivatePub.publish_to "/question/#{@question.id}/answers", response: (render template: 'answers/create.json.jbuilder')
+      PrivatePub.publish_to "/question/#{@question.id}/answers", response: (render template:'answers/create.json.jbuilder')
     else
       flash[:notice] = 'Upss! Can not create Answer.'
       render json: @answer.errors.full_messages, status: :unprocessable_entity
