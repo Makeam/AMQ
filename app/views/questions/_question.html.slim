@@ -16,4 +16,5 @@ p.question-body-text= question.body
     => link_to 'Edit', '', class:'btn btn-xs btn-default edit-question-link', remote: true
     =  link_to 'Delete my question', question_path(question), method: 'delete', class:'btn btn-xs btn-default'
 p: small = question.user.email
+= render partial: 'comments/comments', locals:{commentable: question, commentable_type: 'Question'}
 hr

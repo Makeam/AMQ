@@ -1,0 +1,4 @@
+tr
+  td: a href="/questions/{{ question.id }}" {{ question.title }}
+  td
+    |{{ question.user_email }}

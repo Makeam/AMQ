@@ -2,9 +2,13 @@ Rails.application.routes.draw do
 
   devise_for :users
   root to:'questions#index'
+
+
   resources :questions do
     resources :answers, shallow: true
   end
+
+  resources :comments, only: :create
 
   delete 'attachment/:id' => 'attachments#destroy', as: :remove_attach
   patch 'answers/:id/set_best' => 'answers#set_best', as: :set_best

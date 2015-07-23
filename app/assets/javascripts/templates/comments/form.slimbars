@@ -1,0 +1,8 @@
+form class="new_comment" id="new_comment" action="/comments" data-type="json" accept-charset="UTF-8" data-remote="true" method="post"
+  input value="{{id}}" hidden="hidden" type="text" name="comment[commentable_id]" id="comment_commentable_id"
+  input value="{{type}}" hidden="hidden" type="text" name="comment[commentable_type]" id="comment_commentable_type"
+  .form-group
+    label for="comment_body" Comment
+    textarea class="form-control" rows="2" name="comment[body]" id="comment_body"
+  .form-group
+    input type="submit" name="commit" value="Save" class="btn btn-sm btn-primary"

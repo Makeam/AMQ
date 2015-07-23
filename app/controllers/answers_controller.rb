@@ -10,6 +10,7 @@ class AnswersController < ApplicationController
     @answer.user_id = current_user.id
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
+      PrivatePub.publish_to "/question/#{@question.id}/answers", response: (render template:'answers/create.json.jbuilder')
     else
       flash[:notice] = 'Upss! Can not create Answer.'
       render json: @answer.errors.full_messages, status: :unprocessable_entity
@@ -28,7 +29,7 @@ class AnswersController < ApplicationController
       end
     else
       flash[:notice] = 'You can\'t edit this answer.'
-      render json: @answer, status: :access_denied
+      render json: flash[:notice], status: :forbidden
     end
   end
 
@@ -43,7 +44,7 @@ class AnswersController < ApplicationController
       end
     else
       flash[:notice] = 'You can\'t set Best answer.'
-      render json: @answer, status: :access_denied
+      render json: flash[:notice], status: :forbidden
     end
   end
 

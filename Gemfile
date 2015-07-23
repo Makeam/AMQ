@@ -30,6 +30,10 @@ gem 'carrierwave'
 gem 'remotipart'
 gem "cocoon"
 gem 'handlebars_assets'
+gem "private_pub"
+gem "thin"
+
+gem 'gon'
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"

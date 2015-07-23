@@ -6,8 +6,8 @@ class VotesController < ApplicationController
     if !@votable.blank? and is_not_owner_of?(@votable)
       @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
 
-      if different_votes? and @vote.update(weight: params[:weight])
-
+      if (@vote.new_record? or different_votes?) and @vote.update(weight: params[:weight])
+        # renders voting.json
       else
         render json: @vote.errors.full_messages, status: :unprocessable_entity
       end

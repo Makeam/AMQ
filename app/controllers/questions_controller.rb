@@ -9,6 +9,10 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new(question_id: @question_id)
     @answer.attachments.build
+    @comment = Comment.new
+
+    gon.signed_in = user_signed_in?
+    gon.current_user_id = current_user.id if user_signed_in?
   end
 
   def new
@@ -21,6 +25,7 @@ class QuestionsController < ApplicationController
     @question.user_id = current_user.id
     if @question.save
       flash[:notice] = 'Your question successfully created.'
+      PrivatePub.publish_to "/questions", response: (render_to_string 'questions/create.json.jbuilder')#create_hash
       redirect_to @question
     else
       render :new

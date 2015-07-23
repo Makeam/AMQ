@@ -12,12 +12,15 @@ div.answer id="answer-{{ answer.id }}"
       | {{#if attachments}}
           {{> answers/_attachments }}
         {{/if}}
-  | {{#unless canRate }}
+  | {{#if answer_owner }}
   .edit-answer-form
     | {{> answers/_edit_form }}
   a.btn.btn-xs.btn-default.edit-answer-link> data-answer-id="{{ answer.id }}" data-remote="true" href="#" Edit
   a.btn.btn-xs.btn-default data-remote="true" rel="nofollow" data-method="delete" href="/answers/{{ answer.id }}" Delete my answer
-  | {{/unless }}
+  | {{/if }}
   p: small
     | {{ email }}
+  .comments
+  .new-comment-form
+  a.btn.btn-xs.btn-default.add-comment-link data-commentable-id="{{ answer.id }}" data-commentable-type="Answer" href="" Add comment
   hr

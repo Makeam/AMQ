@@ -1,7 +1,7 @@
 |{{#each attachments }}
 p id="attach-{{ this.id }}"
   a href="{{this.url}}" {{this.filename}}
-  |{{#unless canRate}}
+  |{{#if answer_owner}}
   a< href="/attachment/{{ this.id }}" data-remote="true" rel="nofollow" data-method="delete" class='btn btn-xs btn-default delete-attach'  Delete file
-  |{{/unless }}
+  |{{/if }}
 |{{/each}}

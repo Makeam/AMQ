@@ -35,4 +35,5 @@ div.answer id="answer-#{answer.id}"
     =>(link_to 'Edit', '', class:'btn btn-xs btn-default edit-answer-link', data:{answer_id: answer.id}, remote: true)
     =(link_to 'Delete my answer', answer_path(answer), method: 'delete', class:'btn btn-xs btn-default', remote: true)
   p: small = answer.user.email
+  = render partial: 'comments/comments', locals:{commentable: answer, commentable_type: 'Answer'}
   hr

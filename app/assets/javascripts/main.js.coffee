@@ -12,13 +12,18 @@ update_behavior = ->
       $('.form-errors').html('')
       $('#answer-' + response.answer.id).html ->
         HandlebarsTemplates['answers/answer'](response)
-      update_behavior
+      $.each response.comments, (index, value) ->
+#        alert(value)
+        $('#answer-' + response.answer.id + ' .comments').append ->
+          HandlebarsTemplates['comments/comment'](value)
+        return
+      update_behavior()
     .bind 'ajax:error', (e, xhr, status,error) ->
       errors = $.parseJSON(xhr.responseText)
       $('.form-errors').html('')
       $.each errors, (index, value) ->
         $('.form-errors').append('<p>'+ value + '</p>')
-      return
+        return
     return
 
   show_edit_question_form = (th) ->
@@ -47,7 +52,8 @@ update_behavior = ->
 
   $('a.edit-question-link').click ->
     show_edit_question_form(this)
-    return
+    return false
+
 
   $('.delete-attach').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
@@ -61,18 +67,15 @@ update_behavior = ->
     $('.answers').html('')
     $.each response.answers, (index, value) ->
       $('.answers').append ->
-      HandlebarsTemplates['answers/answer']( value )
-    update_behavior
+        HandlebarsTemplates['answers/answer']( value )
+    update_behavior()
   .bind 'ajax:error', (e, xhr, status, error) ->
     alert ('error')
 
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
-    if response.votable_type == 'Answer'
-      target = '#answer-' + response.votable_id + ' .rating'
-    else
-      target = '.question .rating'
+    target = get_target(response.votable_type, response.votable_id) + ' .rating'
     $(target).html ->
       HandlebarsTemplates['answers/rating']( response )
   .bind 'ajax:error', (e, xhr, status, error) ->
@@ -83,10 +86,7 @@ update_behavior = ->
 
   $('a.cancel-vote').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
-    if response.votable_type == 'Answer'
-      target = '#answer-' + response.votable_id + ' .rating'
-    else
-      target = '.question .rating'
+    target = get_target(response.votable_type, response.votable_id) + ' .rating'
     $(target).html ->
       HandlebarsTemplates['answers/rating']( response )
   .bind 'ajax:error', (e, xhr, status, error) ->
@@ -95,26 +95,89 @@ update_behavior = ->
       $('#answer-' + votable_id).prepend(error)
 
 
+  $('a.add-comment-link').click ->
+    $(this).hide()
+    commentable = {'id': $(this).data('commentableId'), 'type': $(this).data('commentableType')}
+    target = get_target(commentable.type, commentable.id)
+    $(target + ' .new-comment-form').html ->
+      HandlebarsTemplates['comments/form'](commentable)
+    $('form#new_comment').bind 'ajax:success',(e, data, status, xhr) ->
+      response = $.parseJSON(xhr.responseText)
+      target = get_target(response.commentable_type, response.commentable_id)
+      $(target + ' .new-comment-form').html('')
+      $(target + ' a.add-comment-link').show()
+      addComment(target, response)
+
+    .bind 'ajax:error', (e, xhr, status, error) ->
+      console.log('Comment error.')
+    return false
+
+#####  END of update_behavior
+
+addComment = (target, comment) ->
+  if !$(target + ' .comments #comment-' + comment.id).length
+    $(target + ' .comments').append ->
+      HandlebarsTemplates['comments/comment']( comment )
+  return
+
+
+get_target = (type, id) ->
+  if type == 'Answer'
+    target = '#answer-' + id
+  else
+    target = '.question'
+  return target
+
+user_is_owner = (userID) ->
+  if gon.signed_in
+    owner = (gon.current_user_id == userID)
+  else
+    owner = false
+  return owner
+
+
 ready = ->
   update_behavior
 
-  $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
-    response = $.parseJSON(xhr.responseText)
-    $('textarea#answer_body').val('')
-    $('.form-errors').html('')
+
+
+#  $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
+#    response = $.parseJSON(xhr.responseText)
+#    $('textarea#answer_body').val('')
+#    $('.form-errors').html('')
+#    $('.answers').append ->
+#      HandlebarsTemplates['answers/answer']( response )
+#    update_behavior
+#  .bind 'ajax:error', (e, xhr, status, error) ->
+#    $('.form-errors').html('')
+#    errors = $.parseJSON(xhr.responseText)
+#    $.each errors, (index, value) ->
+#      $('.form-errors').append('<p>'+ value + '</p>')
+
+
+  questionId = $('.answers').data('questionId')
+
+  PrivatePub.subscribe '/question/' + questionId + '/answers', (data, channel) ->
+    response = $.parseJSON(data['response'])
+    response.answer_owner = user_is_owner(response.answer.user_id)
+    if response.answer_owner
+      $('textarea#answer_body').val('')
+      $('.form-errors').html('')
     $('.answers').append ->
       HandlebarsTemplates['answers/answer']( response )
-    update_behavior
-  .bind 'ajax:error', (e, xhr, status, error) ->
-    $('.form-errors').html('')
-    errors = $.parseJSON(xhr.responseText)
-    $.each errors, (index, value) ->
-      $('.form-errors').append('<p>'+ value + '</p>')
+    update_behavior()
 
+  PrivatePub.subscribe '/question/' + questionId + '/comments', (data, channel) ->
+    response = $.parseJSON(data['response'])
+    target = get_target(response.commentable_type, response.commentable_id)
+    addComment(target, response)
 
+  PrivatePub.subscribe '/questions', (data, channel) ->
+    response = $.parseJSON(data['response'])
+    $('table.questions').prepend ->
+      HandlebarsTemplates['questions/item_question']( response )
 
-
-#  Здесь могут быть другие обработчики событий и прочий код
+##### END of ready
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready
 $(document).on('page:load', ready)  # "вешаем" функцию ready на событие page:load
