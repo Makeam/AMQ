@@ -1,6 +1,6 @@
 .question
   = render partial: 'questions/question', locals:{question: @question}
-.answers
+.answers data={question_id: "#{@question.id}"}
   = render 'questions/answers'
 
 hr
@@ -19,3 +19,5 @@ hr
       =f.submit 'Save answer', class:'btn btn-primary'
 - else
   p To answer the question you need to sign in.
+
+= subscribe_to "/question/#{@question.id}/answers"

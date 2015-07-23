@@ -68,6 +68,7 @@ update_behavior = ->
 
 
   $('a.set-vote').bind 'ajax:success', (e, data, status, xhr) ->
+    console.log('Set vote success!')
     response = $.parseJSON(xhr.responseText)
     if response.votable_type == 'Answer'
       target = '#answer-' + response.votable_id + ' .rating'
@@ -94,24 +95,45 @@ update_behavior = ->
     $.each errors,(index, error) ->
       $('#answer-' + votable_id).prepend(error)
 
+  $().bind 'ajax'
+
+user_is_owner = (userID) ->
+  if gon.signed_in
+    owner = (gon.current_user_id == userID)
+  else
+    owner = false
+  return owner
+
 
 ready = ->
   update_behavior
 
-  $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
-    response = $.parseJSON(xhr.responseText)
-    $('textarea#answer_body').val('')
-    $('.form-errors').html('')
+
+
+#  $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
+#    response = $.parseJSON(xhr.responseText)
+#    $('textarea#answer_body').val('')
+#    $('.form-errors').html('')
+#    $('.answers').append ->
+#      HandlebarsTemplates['answers/answer']( response )
+#    update_behavior
+#  .bind 'ajax:error', (e, xhr, status, error) ->
+#    $('.form-errors').html('')
+#    errors = $.parseJSON(xhr.responseText)
+#    $.each errors, (index, value) ->
+#      $('.form-errors').append('<p>'+ value + '</p>')
+
+
+  questionId = $('.answers').data('questionId')
+  PrivatePub.subscribe '/question/' + questionId + '/answers', (data, channel) ->
+    response = $.parseJSON(data['response'])
+    response.answer_owner = user_is_owner(response.answer.user_id)
+    if response.answer_owner
+      $('textarea#answer_body').val('')
+      $('.form-errors').html('')
     $('.answers').append ->
       HandlebarsTemplates['answers/answer']( response )
     update_behavior
-  .bind 'ajax:error', (e, xhr, status, error) ->
-    $('.form-errors').html('')
-    errors = $.parseJSON(xhr.responseText)
-    $.each errors, (index, value) ->
-      $('.form-errors').append('<p>'+ value + '</p>')
-
-
 
 
 #  Здесь могут быть другие обработчики событий и прочий код

@@ -1,7 +1,7 @@
 json.answers @answer.question.answers do |answer|
     json.answer answer
-    json.canRate is_not_owner_of?(answer)
-    json.canSetBest is_owner_of?(answer.question)
+    json.answer_owner is_owner_of?(answer)
+    json.question_owner is_owner_of?(answer.question)
     if answer.user_vote(current_user) != nil
         json.userVote answer.user_vote(current_user)
     else

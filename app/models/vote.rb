@@ -11,11 +11,13 @@ class Vote < ActiveRecord::Base
   after_commit :change_vote_to_rating, on: [:update]
 
   def add_vote_to_rating
-    return if marked_for_destruction? # это в случае, когда удаление через dependent: :destroy
-    if destroyed?
-      votable.decrement!(:rating, weight)
-    else
-      votable.increment!(:rating, weight)
+    #это не срабатывает return if marked_for_destruction? # это в случае, когда удаление через dependent: :destroy
+    if votable.present?
+      if destroyed?
+        votable.decrement!(:rating, weight)
+      else
+        votable.increment!(:rating, weight)
+      end
     end
   end
 
