@@ -1,4 +1,5 @@
-p.small
-  | {{ body }}
-p.small.text-muted
-  |{{ user_email }}
+div id="comment-{{ id }}"
+  p.small
+    | {{ body }}
+  p.small.text-muted
+    |{{ user_email }}

@@ -12,9 +12,9 @@ RSpec.describe AnswersController, type: :controller do
     before{ sign_in(owner) }
 
     context 'with valid attributes' do
-      it 'renders create json' do
+      it 'Reaponse status: 200' do
         post :create, question_id: question, answer: FactoryGirl.attributes_for(:answer), format: :json
-        expect(response).to render_template ('create')
+        expect(response.status).to eq 200
       end
 
       it 'saves the new answer in the database' do

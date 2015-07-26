@@ -35,12 +35,5 @@ div.answer id="answer-#{answer.id}"
     =>(link_to 'Edit', '', class:'btn btn-xs btn-default edit-answer-link', data:{answer_id: answer.id}, remote: true)
     =(link_to 'Delete my answer', answer_path(answer), method: 'delete', class:'btn btn-xs btn-default', remote: true)
   p: small = answer.user.email
-  .comments
-    - if answer.comments.any?
-      p: b Комментарии:
-    - answer.comments.find_each do |c|
-      p.small = c.body
-      p.small.text-muted = c.user.email
-  .new-comment-form
-  => link_to 'Add comment', '', class:'btn btn-xs btn-default add-comment-link', data:{commentable_id: answer.id, commentable_type: 'Answer'}
+  = render partial: 'comments/comments', locals:{commentable: answer, commentable_type: 'Answer'}
   hr

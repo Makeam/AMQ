@@ -7,7 +7,9 @@ class CommentsController < ApplicationController
     @comment.user_id = current_user.id
     if @comment.save
       flash[:notice] = 'Comment successfully created.'
-
+      @comment.commentable_type == 'Question' ? question_id = @commentable.id : question_id = @commentable.question.id
+      question_id = 53
+      PrivatePub.publish_to "/question/#{question_id}/comments", response: (render template:'comments/create.json.jbuilder')
     else
       flash[:notice] = 'Error creating comment'
       render json: @comment.errors.full_messages, status: :unprocessable_entity

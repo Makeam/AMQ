@@ -16,12 +16,5 @@ p.question-body-text= question.body
     => link_to 'Edit', '', class:'btn btn-xs btn-default edit-question-link', remote: true
     =  link_to 'Delete my question', question_path(question), method: 'delete', class:'btn btn-xs btn-default'
 p: small = question.user.email
-.comments
-  - if question.comments.any?
-    p: b Комментарии:
-  - question.comments.find_each do |c|
-    p.small = c.body
-    p.small.text-muted = c.user.email
-.new-comment-form
-=> link_to 'Add comment', '', class:'btn btn-xs btn-default add-comment-link', data:{commentable_id: question.id, commentable_type: 'Question'}
+= render partial: 'comments/comments', locals:{commentable: question, commentable_type: 'Question'}
 hr

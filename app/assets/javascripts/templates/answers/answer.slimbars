@@ -20,4 +20,7 @@ div.answer id="answer-{{ answer.id }}"
   | {{/if }}
   p: small
     | {{ email }}
+  .comments
+  .new-comment-form
+  a.btn.btn-xs.btn-default.add-comment-link data-commentable-id="{{ answer.id }}" data-commentable-type="Answer" href="" Add comment
   hr
