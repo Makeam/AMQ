@@ -47,7 +47,29 @@ update_behavior = ->
 
   $('a.edit-question-link').click ->
     show_edit_question_form(this)
-    return
+    return false
+
+  $('a.add-comment-link').click ->
+    console.log('add-comment-link')
+    $(this).hide()
+    commentable = {'id': $(this).data('commentableId'), 'type': $(this).data('commentableType')}
+    $('.new-comment-form').html ->
+      HandlebarsTemplates['comments/form'](commentable)
+    $('form#new_comment').bind 'ajax:success',(e, data, status, xhr) ->
+      response = $.parseJSON(xhr.responseText)
+      if response.commentable_type == 'Answer'
+        target = '#answer-' + response.commentable_id
+      else
+        target = '.question'
+      $(target + ' .comments').append ->
+        HandlebarsTemplates['comments/comment']( response )
+      $(target + ' .new-comment-form').html('')
+      $(target + ' a.add-comment-link').show()
+
+    .bind 'ajax:error', (e, xhr, status, error) ->
+      console.log('Comment error.')
+
+    return false
 
   $('.delete-attach').bind 'ajax:success', (e, data, status, xhr) ->
     response = $.parseJSON(xhr.responseText)
@@ -97,6 +119,13 @@ update_behavior = ->
 
   $().bind 'ajax'
 
+get_target = (type, id) ->
+  if type == 'Answer'
+    target = '#answer-' + id
+  else
+    target = '.question'
+  return target
+
 user_is_owner = (userID) ->
   if gon.signed_in
     owner = (gon.current_user_id == userID)
@@ -138,7 +167,6 @@ ready = ->
 
   PrivatePub.subscribe '/questions', (data, channel) ->
     response = $.parseJSON(data['response'])
-    console.log('Новый вопрос: ' + response)
     $('table.questions').prepend ->
       HandlebarsTemplates['questions/item_question']( response )
 

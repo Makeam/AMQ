@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new(question_id: @question_id)
     @answer.attachments.build
+    @comment = Comment.new
 
     gon.signed_in = user_signed_in?
     gon.current_user_id = current_user.id if user_signed_in?

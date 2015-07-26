@@ -1,0 +1,4 @@
+p.small
+  | {{ body }}
+p.small.text-muted
+  |{{ user_email }}
