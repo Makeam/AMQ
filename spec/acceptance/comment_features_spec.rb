@@ -11,10 +11,10 @@ feature 'Creating comment' do
     visit question_path(question)
     within("#answer-#{answer.id}") do
       click_on 'Add comment'
-      fill_in  'Comment', with: 'My comment'
+      fill_in  'Comment', with: 'My super answer comment'
       click_on 'Save'
       within(".comments") do
-        expect(page).to have_content 'My comment'
+        expect(page).to have_content 'My super answer comment', count: 1
       end
     end
   end
@@ -27,7 +27,7 @@ feature 'Creating comment' do
       fill_in  'Comment', with: 'My question comment'
       click_on 'Save'
       within(".comments") do
-        expect(page).to have_content 'My question comment'
+        expect(page).to have_content 'My question comment', count: 1
       end
     end
   end
