@@ -34,6 +34,7 @@ gem "private_pub"
 gem "thin"
 
 gem 'gon'
+gem 'responders', '~> 2.0'
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"

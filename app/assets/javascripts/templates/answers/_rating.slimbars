@@ -1,5 +1,5 @@
 p.rating-sum.label-default
-  | {{ rating }}
+  |{{ rating }}{{answer.rating}}
 p.links
   |{{#unless answer_owner}}
       {{#if vote }}
