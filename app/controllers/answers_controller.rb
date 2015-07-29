@@ -24,9 +24,16 @@ class AnswersController < ApplicationController
 
   def set_best
     if is_owner_of?(@answer.question)
-      @answer.set_best
+      #@answer.set_best
       #respond_with @answer.set_best
       #respond_with @answer
+
+      if @answer.set_best
+        flash[:notice] = 'You set the answer as Best answer'
+      else
+        flash[:notice] = 'Upss! Best answer not set.'
+        render json: @answer.errors.full_messages, status: :unprocessable_entity
+      end
     else
       flash[:notice] = 'You can\'t set Best answer.'
       render json: flash[:notice], status: :forbidden
