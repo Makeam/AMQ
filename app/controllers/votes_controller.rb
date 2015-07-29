@@ -2,12 +2,14 @@ class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_votable, only: [:voting]
 
+  respond_to :json
+
   def voting
     if !@votable.blank? and is_not_owner_of?(@votable)
       @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
-
-      if (@vote.new_record? or different_votes?) and @vote.update(weight: params[:weight])
-        # renders voting.json
+      if (@vote.new_record? or different_votes?)
+        @vote.update(weight: params[:weight])
+        #respond_with @vote
       else
         render json: @vote.errors.full_messages, status: :unprocessable_entity
       end
@@ -19,12 +21,13 @@ class VotesController < ApplicationController
 
   def destroy
     @vote = Vote.find(params[:id])
-    votable = @vote.votable
-    votable_type = @vote.votable_type
+    @votable = @vote.votable
+    @votable_type = @vote.votable_type
 
-    if is_not_owner_of?(votable)
+    if is_owner_of?(@vote)
+      #respond_with(@vote.destroy)
       if @vote.destroy
-        render json: {votable_id: votable.id, votable_type: votable_type, rating: votable.rating, canRate: true }
+        render json: {votable_id: @votable.id, votable_type: @votable_type, rating: @votable.rating, canRate: true }
       else
         render json: @vote.errors.full_messages, status: :unprocessable_entity
       end

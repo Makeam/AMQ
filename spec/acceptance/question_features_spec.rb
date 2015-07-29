@@ -18,7 +18,7 @@ feature 'Create question', %q{
     fill_in 'Body', with: 'Body question text'
     click_on 'Save'
 
-    expect(page).to have_content 'Your question successfully created'
+    expect(page).to have_content 'Question was successfully created'
     expect(page).to have_content 'My question text'
     expect(page).to have_content 'Body question text'
 
@@ -105,7 +105,7 @@ feature 'Delete question' do
     visit question_path(question)
     click_on 'Delete my question'
 
-    expect(page).to have_content 'Your Question successfully deleted'
+    expect(page).to have_content 'Question was successfully destroyed'
   end
 
   scenario 'User is NOT owner the question' do

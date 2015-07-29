@@ -1,19 +1,19 @@
 $('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200).delay(15000).fadeOut(400);
-
-<% if is_owner_of?(@attachable) %>
+<% attachable = @attachment.attachable %>
+<% if is_owner_of?(attachable) %>
     <% case @attachment.attachable_type %>
         <% when 'Question'%>
             <% if remotipart_submitted? %>
-                $('.question').html('<%= j "#{ render partial:'questions/question', locals: {question: @attachable} }" %>');
+                $('.question').html('<%= j "#{ render partial:'questions/question', locals: {question: attachable} }" %>');
             <% else %>
-                $('.question').html('<%= j render partial:'questions/question', locals: {question: @attachable} %>');
+                $('.question').html('<%= j render partial:'questions/question', locals: {question: attachable} %>');
             <% end %>
         <% when 'Answer'%>
             <% if remotipart_submitted? %>
-                $('.question').html('<%= j "#{ render partial:'questions/question', locals: {question: @attachable} }" %>');
+                $('.question').html('<%= j "#{ render partial:'questions/question', locals: {question: attachable} }" %>');
             <% else %>
-                $('<%= j "#answer-#{@attachable.id}" %>').html('<%= j render partial:'questions/uno_answer', locals: {answer: @attachable} %>');
-                $('<%= j "#answer-#{@attachable.id} .edit-answer-form" %>').hide();
+                $('<%= j "#answer-#{attachable.id}" %>').html('<%= j render partial:'questions/uno_answer', locals: {answer: attachable} %>');
+                $('<%= j "#answer-#{attachable.id} .edit-answer-form" %>').hide();
             <% end %>
     <% end %>
 <% end %>
