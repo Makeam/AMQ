@@ -1,18 +1,12 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_commentable
+  after_action :publish_comment, only:[:create]
+
+  respond_to :json
 
   def create
-    @comment = @commentable.comments.build(comment_params)
-    @comment.user_id = current_user.id
-    if @comment.save
-      flash[:notice] = 'Comment successfully created.'
-      @comment.commentable_type == 'Question' ? question_id = @commentable.id : question_id = @commentable.question.id
-      PrivatePub.publish_to "/question/#{question_id}/comments", response: (render template:'comments/create.json.jbuilder')
-    else
-      flash[:notice] = 'Error creating comment'
-      render json: @comment.errors.full_messages, status: :unprocessable_entity
-    end
+    respond_with(@comment = @commentable.comments.create(comment_params.merge(user: current_user)))
   end
 
   private
@@ -20,6 +14,14 @@ class CommentsController < ApplicationController
   def load_commentable
     model_klass = params[:comment][:commentable_type].classify.constantize
     @commentable = model_klass.find(params[:comment][:commentable_id])
+  end
+
+  def get_question_id
+    @comment.commentable_type == 'Question' ? @commentable.id : @commentable.question.id
+  end
+
+  def publish_comment
+    PrivatePub.publish_to "/question/#{get_question_id}/comments", response: (render_to_string 'comments/create.json.jbuilder') if @comment.valid?
   end
 
   def comment_params

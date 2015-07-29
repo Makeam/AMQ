@@ -1,6 +1,2 @@
-- if @question.answers.any?
-  - @question.answers.each do |a|
-    = render partial:'questions/uno_answer', locals: {answer: a, question: @question, comment: @comment}
-  #no-answers
-- else
-  #no-answers No answers.
+- @question.answers.each do |a|
+  = render partial:'questions/uno_answer', locals: {answer: a, question: @question}

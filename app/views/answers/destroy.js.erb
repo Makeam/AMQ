@@ -1,6 +1,3 @@
 $('#flash-messages').html('<%= j render partial:'layouts/flash' %>').fadeIn(200).delay(15000).fadeOut(400);
 
 $('#answer-<%= j @answer_id.to_s %>').fadeOut(300);
-<% unless @question.answers.any? %>
-    $('#no-answers').html('No answers.').fadeIn(300);
-<% end %>

@@ -11,6 +11,7 @@ feature 'Add files to answer' do
 
   scenario 'User adds file when create answer', js: true do
     fill_in 'Body', with: 'Body answer text'
+    click_on 'Add file'
     attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Save answer'
 
@@ -23,6 +24,7 @@ feature 'Add files to answer' do
 
   scenario 'User adds some files when create answer', js: true do
     fill_in 'Body', with: 'Body answer text'
+    click_on 'Add file'
     within ('.answer-attachments .nested-fields:first-child') do
       attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     end
