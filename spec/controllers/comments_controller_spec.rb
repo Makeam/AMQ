@@ -16,10 +16,18 @@ RSpec.describe CommentsController, type: :controller do
 
     it 'Create new comment associated with answer' do
       sign_in(user)
-      post :create, comment:{commentable_id: answer.id, commentable_type: 'Answer', body:'newComment'}
+      post :create, comment:{commentable_id: answer.id, commentable_type: 'Answer', body:'newComment'}, format: :json
       comment = assigns(:comment)
       expect(comment.user_id).to eq user.id
       expect(comment.commentable).to eq answer
+    end
+
+    it 'Create new comment associated with Question' do
+      sign_in(user)
+      post :create, comment:{commentable_id: question.id, commentable_type: 'Question', body:'newComment'}, format: :json
+      comment = assigns(:comment)
+      expect(comment.user_id).to eq user.id
+      expect(comment.commentable).to eq question
     end
 
   end

@@ -8,9 +8,10 @@ feature 'Add files to question' do
     visit new_question_path
   end
 
-  scenario 'User adds file when ask question' do
+  scenario 'User adds file when ask question', js: true do
     fill_in 'Title', with: 'My question text'
     fill_in 'Body', with: 'Body question text'
+    click_on 'Add file'
     attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Save'
 
@@ -25,6 +26,7 @@ feature 'Add files to question' do
     within ('.question-attachments-fields .nested-fields:first-child') do
       attach_file 'Attach file', "#{Rails.root}/spec/spec_helper.rb"
     end
+    click_on 'Add file'
     sleep(1)
     within ('.question-attachments-fields .nested-fields:nth-child(2)') do
       attach_file 'Attach file', "#{Rails.root}/spec/rails_helper.rb"

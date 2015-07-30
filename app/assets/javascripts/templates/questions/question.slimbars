@@ -12,7 +12,7 @@ p.question-body-text
   | {{> questions/_edit_form }}
 p
   a.btn.btn-xs.btn-default.edit-question-link data-remote="true" href="#" Edit
-  a.btn.btn-xs.btn-default href="questions/{{question.id}}" method="delete" Delete my question
+  a.btn.btn-xs.btn-default href="/questions/{{question.id}}" method="delete" Delete my question
 p: small
   |{{email}}
 hr
