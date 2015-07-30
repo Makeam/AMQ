@@ -118,7 +118,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     it 'Non-authenticated user can\'t select one of answers as Best answer' do
-      patch :set_best, id: answer.id, format: :json§
+      patch :set_best, id: answer.id, format: :json
       answer.reload
       expect(answer.best).to eq false
     end

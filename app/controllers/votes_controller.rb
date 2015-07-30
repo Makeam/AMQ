@@ -9,9 +9,9 @@ class VotesController < ApplicationController
       @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
       if (@vote.new_record? or different_votes?)
         @vote.update(weight: params[:weight])
-        #respond_with @vote
+        respond_with @vote
       else
-        render json: @vote.errors.full_messages, status: :unprocessable_entity
+        render json: {}, status: :locked
       end
     else
       render json: { status: :forbidden }
@@ -25,14 +25,9 @@ class VotesController < ApplicationController
     @votable_type = @vote.votable_type
 
     if is_owner_of?(@vote)
-      #respond_with(@vote.destroy)
-      if @vote.destroy
-        render json: {votable_id: @votable.id, votable_type: @votable_type, rating: @votable.rating, canRate: true }
-      else
-        render json: @vote.errors.full_messages, status: :unprocessable_entity
-      end
+      respond_with(@vote.destroy)
     else
-      render json: { status: :forbidden }
+      render json:{ status: :forbidden }
     end
   end
 

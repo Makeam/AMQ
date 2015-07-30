@@ -2,6 +2,6 @@
 span.best-answer-label.label-success Best answer
 | {{else}}
     {{#if question_owner}}
-a.set-best-link href="/answers/{{ answer.id }}/set_best" data-remote="true" rel="nofollow" data-method="patch" Set best
+a.set-best-link href="/answers/{{ answer.id }}/set_best" data-remote="true" data-type="json" rel="nofollow" data-method="patch" Set best
 |   {{/if}}
 | {{/if}}
