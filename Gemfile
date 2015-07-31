@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'slim-rails'
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-vkontakte'
 gem 'carrierwave'
 gem 'remotipart'
 gem "cocoon"
@@ -53,6 +56,8 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 
+  gem 'letter_opener'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -67,6 +72,7 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'capybara-email'
   gem 'launchy'
   gem 'database_cleaner'
   gem 'poltergeist'

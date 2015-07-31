@@ -31,7 +31,7 @@ module Amq
                        fixtures: true,
                        view_spec: false,
                        helper_specs: false,
-                       rouring_specs: false,
+                       routing_specs: false,
                        request_specs: false,
                        controller_spec: true
 

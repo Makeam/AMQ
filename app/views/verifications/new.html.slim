@@ -1,0 +1,6 @@
+h1 Adding email
+
+= form_for @verification do |f|
+  =f.label :email, 'E-mail'
+  =f.email_field :email
+  =f.submit 'Send me instructions'
