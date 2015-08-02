@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   end
 
   resources :comments, only: :create
+  resources :verifications, only: [:new, :create, :show] do
+    get 'confirm/:token', action: :confirm, as: :confirm
+  end
 
   delete 'attachment/:id' => 'attachments#destroy', as: :remove_attach
   patch 'answers/:id/set_best' => 'answers#set_best', as: :set_best

@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers:[:facebook]
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers:[:facebook, :vkontakte]
 
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
     return authorization.user if authorization
 
     email = auth.info[:email]
+    return User.new unless email
+
     user = User.where(email: email).first
     if user
       user.authorizations.create(provider: auth.provider, uid: auth.uid)
