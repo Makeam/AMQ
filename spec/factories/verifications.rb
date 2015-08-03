@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :verification do
-    email "MyString"
-uid "MyString"
-provider "MyString"
-token "MyString"
+    email "test@example.com"
+    uid "123456"
+    provider "Vkontakte"
+    token "12317618347615834"
   end
 
 end
