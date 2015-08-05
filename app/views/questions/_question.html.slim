@@ -8,7 +8,7 @@ p.question-body-text= question.body
     p id="attach-#{a.id}"
       => link_to a.file.filename, a.file.url
       =  (link_to 'Delete file', remove_attach_path(a.id), method: :delete, remote: true, class:'btn btn-xs btn-default delete-attach') if is_owner_of?(question)
-- if is_owner_of?(question)
+- if can?(:update, question)
   .question-form-errors
   .edit-question-form
     =render partial: 'questions/form', locals: {question: question}

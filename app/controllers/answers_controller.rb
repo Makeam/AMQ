@@ -7,38 +7,40 @@ class AnswersController < ApplicationController
   respond_to :json, except:[:destroy]
   respond_to :js, only:[:destroy]
 
+  authorize_resource
+
   def create
     @question = Question.find(params[:question_id])
     respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def update
-    if is_owner_of?(@answer)
+   # if is_owner_of?(@answer)
       @answer.update(answer_params)
       respond_with @answer
-    else
-      flash[:notice] = 'You can\'t edit this answer.'
-      render json: flash[:notice], status: :forbidden
-    end
+   # else
+    #  flash[:notice] = 'You can\'t edit this answer.'
+    #  render json: flash[:notice], status: :forbidden
+    #end
   end
 
   def set_best
-    if is_owner_of?(@answer.question)
+    #if is_owner_of?(@answer.question)
       respond_with @answer.set_best
-    else
-      flash[:notice] = 'You can\'t set Best answer.'
-      render json: flash[:notice], status: :forbidden
-    end
+    #else
+    #  flash[:notice] = 'You can\'t set Best answer.'
+    #  render json: flash[:notice], status: :forbidden
+    #end
   end
 
 
   def destroy
-    if is_owner_of?(@answer)
+    #if is_owner_of?(@answer)
       @answer_id = @answer.id
       respond_with @answer.destroy
-    else
-      flash[:notice] ='You is not owner this answer.'
-    end
+   # else
+    #  flash[:notice] ='You is not owner this answer.'
+   # end
   end
 
 

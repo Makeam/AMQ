@@ -6,6 +6,8 @@ class QuestionsController < ApplicationController
 
   respond_to :json, only:[:update]
 
+  authorize_resource
+
   def index
     respond_with(@questions = Question.all)
   end
@@ -23,22 +25,22 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if is_owner_of?(@question)
+    #if is_owner_of?(@question)
       @question.update(question_params)
       respond_with @question
-    else
-      flash[:notice] = 'You is not owner of this question.'
-      render json: {}, status: :access_denied
-    end
+    #else
+    #  flash[:notice] = 'You is not owner of this question.'
+    #  render json: {}, status: :access_denied
+    #end
   end
 
   def destroy
-    if is_owner_of?(@question)
+    #if is_owner_of?(@question)
       respond_with(@question.destroy)
-    else
-      flash[:notice] = 'You is not owner this question.'
-      render :show
-    end
+    #else
+    #  flash[:notice] = 'You is not owner this question.'
+    #  render :show
+    #end
   end
 
   private
