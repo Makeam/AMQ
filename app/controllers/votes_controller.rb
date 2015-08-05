@@ -5,30 +5,23 @@ class VotesController < ApplicationController
   respond_to :json
 
   def voting
-    if !@votable.blank? and is_not_owner_of?(@votable)
-      @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
-      if (@vote.new_record? or different_votes?)
-        @vote.update(weight: params[:weight])
-        respond_with @vote
-      else
-        render json: {}, status: :locked
-      end
+    @vote = Vote.find_or_initialize_by(votable_id: params[:votable_id], votable_type: params[:votable_type], user_id: current_user.id)
+    authorize! :voting, @vote
+    if (@vote.new_record? or different_votes?)
+      @vote.update(weight: params[:weight])
+      respond_with @vote
     else
-      render json: { status: :forbidden }
+      render json: {}, status: :locked
     end
   end
 
 
   def destroy
     @vote = Vote.find(params[:id])
+    authorize! :destroy, @vote
     @votable = @vote.votable
     @votable_type = @vote.votable_type
-
-    if is_owner_of?(@vote)
-      respond_with(@vote.destroy)
-    else
-      render json:{ status: :forbidden }
-    end
+    respond_with(@vote.destroy)
   end
 
   private

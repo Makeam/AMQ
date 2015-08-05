@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, alert: exception.message
+  end
+
+
   def is_owner_of?(obj)
     (user_signed_in? and (current_user.id == obj.user_id))
   end

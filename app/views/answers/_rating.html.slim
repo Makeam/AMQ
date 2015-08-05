@@ -1,9 +1,9 @@
 p.rating-sum.label-default
   = votable.rating
 p.links
-  - if user_signed_in? and is_not_owner_of?(votable)
-    - vote = votable.user_vote(current_user)
-    - if !vote.nil?
+  - vote = votable.user_vote(current_user) if user_signed_in?
+  - if can? :voting, vote
+    - if vote.persisted?
       - vote_id = vote.id
       - visible_up = ''
       - visible_down = ''

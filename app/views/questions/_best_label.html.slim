@@ -1,5 +1,5 @@
 -if answer.best
   span.best-answer-label.label-success Best answer
 -else
-  - if (user_signed_in? and (current_user.id == answer.question.user_id))
+  - if can?(:set_best, answer)
     = link_to 'Set best', set_best_path(answer), class:'set-best-link', method: 'patch', remote: true, data: { type: :json }
