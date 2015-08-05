@@ -30,7 +30,7 @@ RSpec.describe VerificationsController, type: :controller do
 
   describe 'GET #confirm' do
     let(:user){create(:user)}
-    let(:verification){create(:verification, email: user.email)}
+    let!(:verification){create(:verification, email: user.email)}
     it 'Delete verification' do
       expect{ get :confirm, verification_id: verification.id, token: verification.token }.to change(Verification, :count).by(-1)
     end
