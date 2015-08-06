@@ -1,15 +1,21 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_commentable
+  before_action :load_comment
   after_action :publish_comment, only:[:create]
 
   respond_to :json
 
   def create
-    respond_with(@comment = @commentable.comments.create(comment_params.merge(user: current_user)))
+    authorize! :create, @comment
+    respond_with(@comment)
   end
 
   private
+
+  def load_comment
+    @comment = @commentable.comments.create(comment_params.merge(user: current_user))
+  end
 
   def load_commentable
     model_klass = params[:comment][:commentable_type].classify.constantize

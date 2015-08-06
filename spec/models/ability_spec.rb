@@ -21,27 +21,39 @@ describe Ability do
     let(:saved_vote_2){ create(:vote_up_question, votable: question_2, user: user_2)}
     let(:vote){ build(:question_vote, votable: question)}
     let(:vote_2){ build(:question_vote, votable: question_2)}
+    let(:vote_3){ build(:answer_vote, votable: answer)}
+    let(:vote_4){ build(:answer_vote, votable: answer_2)}
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
 
-    it { should be_able_to :create, Question }
-    it { should be_able_to :destroy, question, user: user }
-    it { should be_able_to :update, question, user: user }
-    it { should_not be_able_to :update, question_2, user: user }
+    context 'Question' do
+      it { should be_able_to :create, Question }
+      it { should be_able_to :destroy, question, user: user }
+      it { should be_able_to :update, question, user: user }
+      it { should_not be_able_to :update, question_2, user: user }
+    end
 
-    it { should be_able_to :create, Answer }
-    it { should be_able_to :destroy, answer, user: user }
-    it { should be_able_to :update, answer, user: user }
-    it { should_not be_able_to :update, answer_2, user: user }
+    context 'Answer' do
+      it { should be_able_to :create, Answer }
+      it { should be_able_to :destroy, answer, user: user }
+      it { should be_able_to :update, answer, user: user }
+      it { should_not be_able_to :update, answer_2, user: user }
+    end
+    
+    context 'Set Best' do
+      it { should be_able_to :set_best, answer, user: user}
+      it { should_not be_able_to :set_best, answer_2, user: user}
+    end
 
-    it { should be_able_to :set_best, answer, user: user}
-    it { should_not be_able_to :set_best, answer_2, user: user}
-
-    it { should be_able_to :destroy, saved_vote, user: user }
-    it { should_not be_able_to :destroy, saved_vote_2, user: user }
-    it { should be_able_to :voting, vote_2, user: user}
-    it { should_not be_able_to :voting, vote, user: user}
+    context 'Voting' do
+      it { should be_able_to :destroy, saved_vote, user: user }
+      it { should_not be_able_to :destroy, saved_vote_2, user: user }
+      it { should be_able_to :voting, vote_2, user: user}
+      it { should_not be_able_to :voting, vote, user: user}
+      it { should be_able_to :voting, vote_4, user: user}
+      it { should_not be_able_to :voting, vote_3, user: user}
+    end
 
   end
 

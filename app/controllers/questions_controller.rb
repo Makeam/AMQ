@@ -25,22 +25,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    #if is_owner_of?(@question)
       @question.update(question_params)
       respond_with @question
-    #else
-    #  flash[:notice] = 'You is not owner of this question.'
-    #  render json: {}, status: :access_denied
-    #end
   end
 
   def destroy
-    #if is_owner_of?(@question)
-      respond_with(@question.destroy)
-    #else
-    #  flash[:notice] = 'You is not owner this question.'
-    #  render :show
-    #end
+    respond_with(@question.destroy)
   end
 
   private

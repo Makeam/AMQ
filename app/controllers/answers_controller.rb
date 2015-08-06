@@ -15,32 +15,18 @@ class AnswersController < ApplicationController
   end
 
   def update
-   # if is_owner_of?(@answer)
-      @answer.update(answer_params)
-      respond_with @answer
-   # else
-    #  flash[:notice] = 'You can\'t edit this answer.'
-    #  render json: flash[:notice], status: :forbidden
-    #end
+    @answer.update(answer_params)
+    respond_with @answer
   end
 
   def set_best
-    #if is_owner_of?(@answer.question)
-      respond_with @answer.set_best
-    #else
-    #  flash[:notice] = 'You can\'t set Best answer.'
-    #  render json: flash[:notice], status: :forbidden
-    #end
+    respond_with @answer.set_best
   end
 
 
   def destroy
-    #if is_owner_of?(@answer)
-      @answer_id = @answer.id
-      respond_with @answer.destroy
-   # else
-    #  flash[:notice] ='You is not owner this answer.'
-   # end
+    @answer_id = @answer.id
+    respond_with @answer.destroy
   end
 
 
