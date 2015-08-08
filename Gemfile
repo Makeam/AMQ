@@ -39,6 +39,8 @@ gem "thin"
 gem 'gon'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
+gem 'doorkeeper'
+gem 'active_model_serializers'
 
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"
@@ -78,6 +80,7 @@ group :test do
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'test_after_commit'
+  gem 'json_spec'
   #gem 'selenium-webdriver'
   #gem 'capybara-webkit'
 end

@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :comment do
     body "MyComment"
-    user_id
-    commentable
+    user
+    commentable { |a| a.association(:question) }
   end
 
 end
