@@ -15,6 +15,7 @@ Doorkeeper.configure do
   #   # Put your admin authentication logic here.
   #   # Example implementation:
   #   Admin.find_by_id(session[:admin_id]) || redirect_to(new_admin_session_url)
+  #   current_user.try(:admin?) || redirect_to(new_user_session_path)
   # end
 
   # Authorization Code expiration time (default 10 minutes).
@@ -22,7 +23,7 @@ Doorkeeper.configure do
 
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
-  # access_token_expires_in 2.hours
+  access_token_expires_in 24.hours
 
   # Assign a custom TTL for implicit grants.
   # custom_access_token_expires_in do |oauth_client|
