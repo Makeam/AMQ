@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'answers API' do
-  let(:user){create(:user)}
+  let(:user){ create(:user) }
   let!(:question) { create(:question) }
   let!(:answers) { create_list(:answer, 2, question: question) }
   let!(:answer) { answers.first }
@@ -94,6 +94,54 @@ describe 'answers API' do
 
         it "contains file path" do
           expect(response.body).to be_json_eql(attachment.file.url.to_json).at_path("answer/attachments/0/file")
+        end
+      end
+    end
+  end
+
+  describe 'POST /questions/:question_id/answers' do
+    let(:access_token) { create(:access_token) }
+    let(:current_user) { User.find(access_token.resource_owner_id) }
+    let(:question) { create(:question) }
+
+    context 'authorized' do
+      context 'with valid attributes' do
+        let(:request) do
+          post "/api/v1/questions/#{question.id}/answers",
+              answer: attributes_for(:answer),
+              format: :json,
+              access_token: access_token.token
+        end
+
+        it 'returns status 201' do
+          request
+          expect(response).to have_http_status :created
+        end
+
+        it 'saves answer in database' do
+          expect { request }.to change(Answer, :count).by(1)
+        end
+
+        it 'assigns created answer to current user' do
+          expect { request }.to change(current_user.answers, :count).by(1)
+        end
+      end
+
+      context 'witn invalid attributes' do
+        let(:invalid_params_request) do
+          post "/api/v1/questions/#{question.id}/answers",
+               answer: attributes_for(:invalid_answer),
+              format: :json,
+              access_token: access_token.token
+        end
+
+        it 'returns status 422' do
+          invalid_params_request
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'does not save answer in database' do
+          expect { invalid_params_request }.to_not change(Answer, :count)
         end
       end
     end
