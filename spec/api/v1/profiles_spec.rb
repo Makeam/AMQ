@@ -65,7 +65,7 @@ describe 'profile API' do
       end
 
       it 'response contains a list of users' do
-        expect(response.body).to be_json_eql(users.to_json)
+        expect(response.body).to be_json_eql(users.to_json).at_path('profiles')
       end
 
     end

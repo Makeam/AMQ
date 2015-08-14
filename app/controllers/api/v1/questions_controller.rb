@@ -1,15 +1,12 @@
-class Api::V1::QuestionsController < ApplicationController
-  before_action :doorkeeper_authorize!
-  respond_to :json
+class Api::V1::QuestionsController < Api::V1::BaseController
 
   def index
     @questions = Question.all
-    respond_with @questions
+    respond_with @questions, each_serializer: QuestionInCollectionSerializer
   end
 
-  protected
-
-  def current_resource_owner
-    @current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  def show
+    respond_with @question = Question.find(params[:id])
   end
+
 end

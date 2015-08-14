@@ -41,10 +41,87 @@ describe 'questions API' do
           expect(response.body).to have_json_size(1).at_path("questions/0/answers")
         end
 
-        %w(id body created_at updated_at).each do |attr|
+        %w(id body).each do |attr|
           it "contains #{attr}" do
             expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("questions/0/answers/0/#{attr}")
           end
+        end
+      end
+    end
+
+  end
+
+  describe 'GET /questions/:id' do
+    let(:user){create(:user)}
+    let(:access_token) { create(:access_token) }
+    let!(:question) { create(:question) }
+    let!(:answer) { create(:answer, question: question) }
+    let!(:comment) { create(:comment, commentable: question, user: user) }
+    let!(:attachment){ question.attachments.create(attributes_for(:question_attachment)) }
+
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        get "/api/v1/questions/#{question.id}", format: :json
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if access_token is invalid' do
+        get "/api/v1/questions/#{question.id}", format: :json, access_token: '1234'
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+
+      before {
+        get "/api/v1/questions/#{question.id}", format: :json, access_token: access_token.token
+      }
+
+      it 'returns 200 status code' do
+        expect(response).to be_success
+      end
+
+      it 'returns one of questions' do
+        expect(response.body).to have_json_path('question')
+      end
+
+      context 'Answers' do
+        it 'included answers in question object' do
+          expect(response.body).to have_json_size(1).at_path("question/answers")
+        end
+
+        %w(id body user_id rating created_at updated_at).each do |attr|
+          it "contains #{attr}" do
+            expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("question/answers/0/#{attr}")
+          end
+        end
+      end
+
+      context 'Comments' do
+        it 'included comments in question object' do
+          expect(response.body).to have_json_size(1).at_path("question/comments")
+        end
+
+        %w(id body created_at user_id).each do |attr|
+          it "contains #{attr}" do
+            expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path("question/comments/0/#{attr}")
+          end
+        end
+      end
+
+      context 'Attachments' do
+        it 'included Attachments in question object' do
+          expect(response.body).to have_json_size(1).at_path("question/attachments")
+        end
+
+        %w(id).each do |attr|
+          it "contains #{attr}" do
+            expect(response.body).to be_json_eql(attachment.send(attr.to_sym).to_json).at_path("question/attachments/0/#{attr}")
+          end
+        end
+
+        it "contains file path" do
+          expect(response.body).to be_json_eql(attachment.file.url.to_json).at_path("question/attachments/0/file")
         end
       end
     end
