@@ -1,5 +1,7 @@
 class Api::V1::AnswersController < Api::V1::BaseController
 
+  authorize_resource
+
   def index
     @answers = Question.find(params[:question_id]).answers
     respond_with @answers, each_serializer: AnswerInCollectionSerializer

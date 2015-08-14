@@ -131,6 +131,24 @@ describe 'questions API' do
     let(:access_token) { create(:access_token) }
     let(:current_user) { User.find(access_token.resource_owner_id) }
 
+    context 'unauthorized' do
+      it 'returns 401 status if there is no access_token' do
+        post "/api/v1/questions",
+             question: attributes_for(:question),
+             format: :json
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if access_token is invalid' do
+        post "/api/v1/questions",
+             question: attributes_for(:question),
+             format: :json,
+             access_token: '1234'
+        expect(response.status).to eq 401
+      end
+    end
+
+
     context 'authorized' do
       context 'with valid attributes' do
         let(:request) do
