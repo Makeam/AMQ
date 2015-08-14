@@ -125,6 +125,52 @@ describe 'questions API' do
         end
       end
     end
+  end
 
+  describe 'POST /questions' do
+    let(:access_token) { create(:access_token) }
+    let(:current_user) { User.find(access_token.resource_owner_id) }
+
+    context 'authorized' do
+      context 'with valid attributes' do
+        let(:request) do
+          post "/api/v1/questions",
+               question: attributes_for(:question),
+               format: :json,
+               access_token: access_token.token
+        end
+
+        it 'returns status 201' do
+          request
+          expect(response).to have_http_status :created
+        end
+
+        it 'saves question in database' do
+          expect { request }.to change(Question, :count).by(1)
+        end
+
+        it 'assigns created question to current user' do
+          expect { request }.to change(current_user.questions, :count).by(1)
+        end
+      end
+
+      context 'witn invalid attributes' do
+        let(:invalid_params_request) do
+          post "/api/v1/questions",
+               question: attributes_for(:invalid_question),
+               format: :json,
+               access_token: access_token.token
+        end
+
+        it 'returns status 422' do
+          invalid_params_request
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'does not save question in database' do
+          expect { invalid_params_request }.to_not change(Question, :count)
+        end
+      end
+    end
   end
 end
