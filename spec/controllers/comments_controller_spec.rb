@@ -1,35 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-
   describe "POST #create" do
 
     let (:user) { create(:user) }
-    let (:question) { create(:question, user: user) }
-    let (:answer) { create(:answer, question: question, user: user) }
-    let (:comment) {create(:comment, user: user, commentable: answer)}
 
-    it 'Create new comment' do
-      sign_in(user)
-      expect { post :create, comment:{commentable_id: answer.id, commentable_type: 'Answer', body:'newComment'}, format: :json }.to change(Comment, :count).by(1)
+    context "Question" do
+      let!(:commentable){ create(:question) }
+
+      it_behaves_like "Commentable"
     end
 
-    it 'Create new comment associated with answer' do
-      sign_in(user)
-      post :create, comment:{commentable_id: answer.id, commentable_type: 'Answer', body:'newComment'}, format: :json
-      comment = assigns(:comment)
-      expect(comment.user_id).to eq user.id
-      expect(comment.commentable).to eq answer
-    end
+    context "Answer" do
+      let!(:commentable){ create(:answer) }
 
-    it 'Create new comment associated with Question' do
-      sign_in(user)
-      post :create, comment:{commentable_id: question.id, commentable_type: 'Question', body:'newComment'}, format: :json
-      comment = assigns(:comment)
-      expect(comment.user_id).to eq user.id
-      expect(comment.commentable).to eq question
+      it_behaves_like "Commentable"
     end
 
   end
-
 end

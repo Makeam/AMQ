@@ -9,26 +9,16 @@ describe 'answers API' do
   let!(:attachment){ answer.attachments.create(attributes_for(:answer_attachment)) }
 
   describe 'GET /questions/:question_id/answers' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}/answers", format: :json
-        expect(response.status).to eq 401
-      end
 
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{question.id}/answers", format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
+    let(:method){ :get }
+    let(:path){"/api/v1/questions/#{question.id}/answers"}
+    let(:access_token) { create(:access_token) }
+
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
 
-      before { get "/api/v1/questions/#{question.id}/answers", format: :json, access_token: access_token.token }
-
-      it 'returns 200 status code' do
-        expect(response).to be_success
-      end
+      before { do_request(method, path, access_token: access_token.token) }
 
       it 'returns list of answers' do
         expect(response.body).to have_json_size(2).at_path("answers")
@@ -43,25 +33,15 @@ describe 'answers API' do
   end
 
   describe 'GET /answer/:id' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}/answers", format: :json
-        expect(response.status).to eq 401
-      end
+    let(:method){ :get }
+    let(:path){"/api/v1/answers/#{answer.id}"}
+    let(:access_token) { create(:access_token) }
 
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{question.id}/answers", format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
+
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
 
-      before { get "/api/v1/answers/#{answer.id}", format: :json, access_token: access_token.token }
-
-      it 'returns 200 status code' do
-        expect(response).to be_success
-      end
+      before { do_request(method, path, access_token: access_token.token) }
 
       %w(id body created_at updated_at user_id rating best).each do |attr|
         it "answer object contains #{attr}" do
@@ -100,23 +80,19 @@ describe 'answers API' do
   end
 
   describe 'POST /questions/:question_id/answers' do
+    let(:question) { create(:question) }
+    let(:path){"/api/v1/questions/#{question.id}/answers"}
     let(:access_token) { create(:access_token) }
     let(:current_user) { User.find(access_token.resource_owner_id) }
-    let(:question) { create(:question) }
 
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
-        post "/api/v1/questions/#{question.id}/answers",
-             answer: attributes_for(:answer),
-             format: :json
+        do_request(:post, path, answer: attributes_for(:answer))
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if access_token is invalid' do
-        post "/api/v1/questions/#{question.id}/answers",
-             answer: attributes_for(:answer),
-             format: :json,
-             access_token: '1234'
+        do_request(:post, path, answer: attributes_for(:answer), access_token: '1234')
         expect(response.status).to eq 401
       end
     end
@@ -124,10 +100,7 @@ describe 'answers API' do
     context 'authorized' do
       context 'with valid attributes' do
         let(:request) do
-          post "/api/v1/questions/#{question.id}/answers",
-              answer: attributes_for(:answer),
-              format: :json,
-              access_token: access_token.token
+          do_request(:post, path, answer: attributes_for(:answer), access_token: access_token.token)
         end
 
         it 'returns status 201' do
@@ -146,10 +119,7 @@ describe 'answers API' do
 
       context 'witn invalid attributes' do
         let(:invalid_params_request) do
-          post "/api/v1/questions/#{question.id}/answers",
-               answer: attributes_for(:invalid_answer),
-              format: :json,
-              access_token: access_token.token
+          do_request(:post, path, answer: attributes_for(:invalid_answer), access_token: access_token.token)
         end
 
         it 'returns status 422' do
