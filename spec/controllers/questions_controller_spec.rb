@@ -2,8 +2,6 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
 
-  let (:question){FactoryGirl.create(:question)}
-
   describe 'GET #index' do
     let(:questions) {FactoryGirl.create_list(:question,2)}
 
@@ -16,12 +14,13 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     it 'renders index view' do
-      get :index
       expect(response).to render_template :index
     end
   end
 
   describe 'GET #show' do
+    let (:question){FactoryGirl.create(:question)}
+
     context 'question actions' do
       before { get :show, id: question }
 
@@ -33,11 +32,13 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to render_template :show
       end
     end
+
     context 'Answers actions' do
       let!(:question1){create(:question)}
       let!(:answer1){create(:answer, question: question1)}
       let!(:answer2){create(:answer, question: question1)}
       let!(:answer3){create(:answer, question: question1)}
+
       before { get :show, id: question }
 
       it 'Orders answers by best desc' do
@@ -63,39 +64,47 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+
+    let(:publish_path){ "/questions" }
+    let(:request){ post :create, question: attributes_for(:question) }
+    let(:invalid_params_request){ post :create, question: attributes_for(:invalid_question) }
     let(:user1){ create(:user) }
 
-    context 'Authenticated user try create question with valid attributes' do
+    context 'Authenticated user' do
       before { sign_in(user1) }
-      it 'saves the new question in the database' do
-        expect { post :create, question: FactoryGirl.attributes_for(:question) }.to change(Question, :count).by(1)
+
+      context 'try create question with VALID attributes' do
+        it 'saves the new question in the database' do
+          expect { request }.to change(Question, :count).by(1)
+        end
+
+        it 'assigns the question with current user' do
+          request
+          question = assigns(:question)
+          expect(question.user_id).to eq user1.id
+        end
+
+        it 'redirects to show view' do
+          request
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
+      end
+      context 'try create question with INVALID attributes' do
+        it 'does not save the question' do
+          expect { invalid_params_request }.to_not change(Question, :count)
+        end
+
+        it 're-renders new view' do
+          invalid_params_request
+          expect(response).to render_template :new
+        end
       end
 
-      it 'assigns the question with current user' do
-        post :create, question: FactoryGirl.attributes_for(:question)
-        question = assigns(:question)
-        expect(question.user_id).to eq user1.id
-      end
-
-      it 'redirects to show view' do
-        post :create, question: FactoryGirl.attributes_for(:question)
-        expect(response).to redirect_to question_path(assigns(:question))
-      end
-    end
-    context 'Authenticated user try create question with invalid attributes' do
-      before { sign_in(user1) }
-      it 'does not save the question' do
-        expect { post :create, question: FactoryGirl.attributes_for(:invalid_question) }.to_not change(Question, :count)
-      end
-
-      it 're-renders new view' do
-        post :create, question: FactoryGirl.attributes_for(:invalid_question)
-        expect(response).to render_template :new
-      end
+      it_behaves_like "Publishable"
     end
     context 'Non-authenticated user try create question' do
       it 'does not save the question' do
-        expect { post :create, question: FactoryGirl.attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect { request }.to_not change(Question, :count)
       end
     end
   end
