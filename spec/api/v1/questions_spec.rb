@@ -2,29 +2,19 @@ require 'rails_helper'
 
 describe 'questions API' do
   describe 'GET /questions' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/questions', format: :json
-        expect(response.status).to eq 401
-      end
 
-      it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/questions', format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
+    let(:method){:get}
+    let(:path){'/api/v1/questions'}
+    let(:access_token) { create(:access_token) }
+
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
       let!(:questions) { create_list(:question, 2) }
       let(:question) { questions.first }
       let!(:answer) { create(:answer, question: question) }
 
-      before { get '/api/v1/questions', format: :json, access_token: access_token.token }
-
-      it 'returns 200 status code' do
-        expect(response).to be_success
-      end
+      before { do_request(method, path, access_token: access_token.token) }
 
       it 'returns list of questions' do
         expect(response.body).to have_json_size(2).at_path("questions")
@@ -52,34 +42,25 @@ describe 'questions API' do
   end
 
   describe 'GET /questions/:id' do
-    let(:user){create(:user)}
-    let(:access_token) { create(:access_token) }
-    let!(:question) { create(:question) }
-    let!(:answer) { create(:answer, question: question) }
-    let!(:comment) { create(:comment, commentable: question, user: user) }
+
+    let(:question){ create(:question) }
+
+    let(:method){:get}
+    let(:path){ "/api/v1/questions/#{question.id}" }
+    let(:access_token){ create(:access_token) }
+
+    it_behaves_like "API Authenticable"
+
+    let(:user){ create(:user) }
+    let!(:answer){ create(:answer, question: question) }
+    let!(:comment){ create(:comment, commentable: question, user: user) }
     let!(:attachment){ question.attachments.create(attributes_for(:question_attachment)) }
-
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}", format: :json
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{question.id}", format: :json, access_token: '1234'
-        expect(response.status).to eq 401
-      end
-    end
 
     context 'authorized' do
 
       before {
-        get "/api/v1/questions/#{question.id}", format: :json, access_token: access_token.token
+        do_request(method, path, access_token: access_token.token)
       }
-
-      it 'returns 200 status code' do
-        expect(response).to be_success
-      end
 
       it 'returns one of questions' do
         expect(response.body).to have_json_path('question')
@@ -128,22 +109,18 @@ describe 'questions API' do
   end
 
   describe 'POST /questions' do
+    let(:path){"/api/v1/questions"}
     let(:access_token) { create(:access_token) }
     let(:current_user) { User.find(access_token.resource_owner_id) }
 
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
-        post "/api/v1/questions",
-             question: attributes_for(:question),
-             format: :json
+        do_request(:post, path, question: attributes_for(:question))
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if access_token is invalid' do
-        post "/api/v1/questions",
-             question: attributes_for(:question),
-             format: :json,
-             access_token: '1234'
+        do_request(:post, path, question: attributes_for(:question), access_token: '1234')
         expect(response.status).to eq 401
       end
     end
@@ -152,10 +129,7 @@ describe 'questions API' do
     context 'authorized' do
       context 'with valid attributes' do
         let(:request) do
-          post "/api/v1/questions",
-               question: attributes_for(:question),
-               format: :json,
-               access_token: access_token.token
+          do_request(:post, path, question: attributes_for(:question), access_token: access_token.token)
         end
 
         it 'returns status 201' do
@@ -174,10 +148,7 @@ describe 'questions API' do
 
       context 'witn invalid attributes' do
         let(:invalid_params_request) do
-          post "/api/v1/questions",
-               question: attributes_for(:invalid_question),
-               format: :json,
-               access_token: access_token.token
+          do_request(:post, path, question: attributes_for(:invalid_question), access_token: access_token.token)
         end
 
         it 'returns status 422' do
