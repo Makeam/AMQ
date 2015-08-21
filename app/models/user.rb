@@ -29,4 +29,10 @@ class User < ActiveRecord::Base
     return user
   end
 
+  def self.send_daily_digest
+    find_each do |u|
+      NewsMailer.daily_digest(u).deliver_later
+    end
+  end
+
 end
