@@ -133,6 +133,5 @@ RSpec.describe AnswersController, type: :controller do
       answer.reload
       expect(answer.best).to eq false
     end
-
   end
 end

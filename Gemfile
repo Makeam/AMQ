@@ -42,6 +42,9 @@ gem 'cancancan'
 gem 'doorkeeper'
 gem 'active_model_serializers'
 
+gem 'sidekiq'
+gem "sinatra", ">=1.3.0", require: nil
+
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"
 gem 'less-rails-bootstrap'
