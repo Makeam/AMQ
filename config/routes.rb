@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers, shallow: true
+    resources :subscribes, only:[:create, :destroy], shallow: true
   end
 
   resources :comments, only: :create

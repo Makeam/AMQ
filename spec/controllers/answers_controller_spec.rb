@@ -143,6 +143,7 @@ RSpec.describe AnswersController, type: :controller do
 
     it "should send notification to question's owner" do
       expect(NewsMailer).to receive(:new_answer_notification).with(question)
+      #expect(NewsMailer.new_answer_notification(question)).to receive(:deliver_later)
       request
     end
     it "should send notification to subscribed users" do

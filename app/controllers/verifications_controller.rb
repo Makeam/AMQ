@@ -9,7 +9,7 @@ class VerificationsController < ApplicationController
 
     unless verification_exists?
       @verification = Verification.create(verification_params.merge(provider: @oauth.provider, uid: @oauth.uid))
-      VerificationMailer.confirmation_email(@verification).deliver_later if @verification.persisted?
+      VerificationMailer.confirmation_email(@verification).deliver_now if @verification.persisted?
       respond_with @verification
     else
       flash[:notice] = "We have already sent instructions. Please check your e-mail."
