@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_answer, only: [:update, :set_best, :destroy]
   after_action :publish_answer, only: [:create]
+  after_action :send_notification, only: [:create]
 
   respond_to :json, except:[:destroy]
   respond_to :js, only:[:destroy]
@@ -31,6 +32,13 @@ class AnswersController < ApplicationController
 
 
   private
+
+  def send_notification
+    if @answer.valid?
+      NewsMailer.new_answer_notification(@question)
+      QuestionUpdateNotificationJob.perform_later(@question)
+    end
+  end
 
   def publish_answer
     PrivatePub.publish_to "/question/#{@answer.question_id}/answers", response: (render_to_string 'answers/create.json.jbuilder') if @answer.valid?
