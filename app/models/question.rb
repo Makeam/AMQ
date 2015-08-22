@@ -6,7 +6,8 @@ class Question < ActiveRecord::Base
   belongs_to :user
   has_many :answers, -> { order "best DESC" },
            dependent: :destroy
-
+  has_many :subscribes, dependent: :destroy
+  has_many :subscribed_users, through: :subscribes, source: :user
 
   has_many :attachments, as: :attachable, dependent: :destroy
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
