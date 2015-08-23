@@ -35,7 +35,8 @@ class AnswersController < ApplicationController
 
   def send_notification
     if @answer.valid?
-      NewsMailer.new_answer_notification(@question).deliver_later
+      #NewsMailer.new_answer_notification(@question).deliver_later
+      NewAnswerNotificationJob.perform_later(@question)
       QuestionUpdateNotificationJob.perform_later(@question)
     end
   end
