@@ -1,7 +1,8 @@
 class SearchController < ApplicationController
+  authorize_resource
 
   def index
-    @results = Finder.search params[:search][:query], params[:search][:filter]
+    @results = Search.search params[:search][:query], params[:search][:filter]
     respond_with( @results )
   end
 

@@ -1,4 +1,4 @@
-class Finder
+class Search
 
   def self.search(query, filter = nil)
     return if query.blank?

@@ -37,7 +37,7 @@ html lang="en"
             = simple_form_for :search, url: search_path, method: :get, html: { class: 'navbar-form navbar-right' } do |f|
               = f.input :query, as: :string, label: false
               .form-group
-                = f.input :filter, collection:['Question', 'Answer'], prompt: 'All', label: false
+                = f.input :filter, collection:['Question', 'Answer', 'Comment', 'User'], prompt: 'All', label: false
               = f.submit 'Search', class: 'btn btn-default'
 
     .container
