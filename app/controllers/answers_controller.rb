@@ -33,14 +33,6 @@ class AnswersController < ApplicationController
 
   private
 
-  def send_notification
-    if @answer.valid?
-      #NewsMailer.new_answer_notification(@question).deliver_later
-      NewAnswerNotificationJob.perform_later(@question)
-      QuestionUpdateNotificationJob.perform_later(@question)
-    end
-  end
-
   def publish_answer
     PrivatePub.publish_to "/question/#{@answer.question_id}/answers", response: (render_to_string 'answers/create.json.jbuilder') if @answer.valid?
   end

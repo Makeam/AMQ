@@ -134,21 +134,4 @@ RSpec.describe AnswersController, type: :controller do
       expect(answer.best).to eq false
     end
   end
-  describe "Send notification" do
-    let(:user){create(:user)}
-    let!(:question){create(:question)}
-    let(:request){ post :create, question_id: question, answer: attributes_for(:answer), format: :json }
-
-    before{ sign_in(user) }
-
-    it "should send notification to question's owner" do
-      #expect(NewsMailer).to receive(:answer_notification).with(question)
-      expect(NewAnswerNotificationJob).to receive(:perform_later).with(question)
-      request
-    end
-    it "should send notification to subscribed users" do
-      expect(QuestionUpdateNotificationJob).to receive(:perform_later).with(question)
-      request
-    end
-  end
 end

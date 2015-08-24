@@ -13,4 +13,32 @@ RSpec.describe Answer, type: :model do
   it_behaves_like "Attachable model"
   it_behaves_like "Commentable model"
   it_behaves_like "Votable model"
+
+  describe "Send notifications" do
+    let(:question){create(:question)}
+    subject {build(:answer, question: question)}
+
+    it "should send notification to question's owner" do
+      expect(NewAnswerNotificationJob).to receive(:perform_later).with(question)
+      subject.save!
+    end
+
+    it "should send notification to subscribed users" do
+      expect(QuestionUpdateNotificationJob).to receive(:perform_later).with(question)
+      subject.save!
+    end
+
+    it "should not send notification to question's owner after update" do
+      subject.save!
+      expect(NewAnswerNotificationJob).to_not receive(:perform_later).with(question)
+      subject.update(body:"1234567890")
+    end
+
+    it "should send notification to subscribed users after update" do
+      subject.save!
+      expect(QuestionUpdateNotificationJob).to_not receive(:perform_later).with(question)
+      subject.update(body:"1234567890")
+    end
+
+  end
 end
