@@ -1,7 +1,8 @@
 class SearchController < ApplicationController
 
   def index
-    @results = Question.search(params[:search][:query])
+    @results = Finder.search params[:search][:query], params[:search][:filter]
+    respond_with( @results )
   end
 
 end
