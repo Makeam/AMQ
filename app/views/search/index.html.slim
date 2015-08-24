@@ -1,0 +1,12 @@
+h1 Search results
+.result
+  -if @results
+    - @results.each do |result|
+      - if result.try(:body)
+        h5 = result.try(:title)
+        = result.body
+      - else
+        = result.email
+      hr
+  - else
+    p Nothing find.
