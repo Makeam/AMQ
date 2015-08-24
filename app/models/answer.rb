@@ -14,6 +14,8 @@ class Answer < ActiveRecord::Base
   validates :body, length: { in: 5..3000 }
   validates :question_id, numericality: true
 
+  after_create :send_notification
+
   def set_best
     self.transaction do
       self.question.answers.update_all(best: false)
@@ -22,5 +24,11 @@ class Answer < ActiveRecord::Base
     return self
   end
 
+  private
+
+  def send_notification
+    NewAnswerNotificationJob.perform_later(question)
+    QuestionUpdateNotificationJob.perform_later(question)
+  end
 
 end

@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers:[:facebook, :vkontakte]
 
   has_many :questions, dependent: :destroy
+  has_many :subscribes, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -27,6 +28,12 @@ class User < ActiveRecord::Base
       user.authorizations.create(provider: auth.provider, uid: auth.uid)
     end
     return user
+  end
+
+  def self.send_daily_digest
+    find_each do |u|
+      NewsMailer.daily_digest(u).deliver_later
+    end
   end
 
 end

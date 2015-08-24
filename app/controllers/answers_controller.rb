@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_answer, only: [:update, :set_best, :destroy]
   after_action :publish_answer, only: [:create]
+  after_action :send_notification, only: [:create]
 
   respond_to :json, except:[:destroy]
   respond_to :js, only:[:destroy]
