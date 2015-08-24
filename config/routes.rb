@@ -30,6 +30,8 @@ Rails.application.routes.draw do
     get 'confirm/:token', action: :confirm, as: :confirm
   end
 
+  get 'search' => 'search#index'
+
   delete 'attachment/:id' => 'attachments#destroy', as: :remove_attach
   patch 'answers/:id/set_best' => 'answers#set_best', as: :set_best
   patch 'votes/set_vote' => 'votes#voting', as: :set_vote

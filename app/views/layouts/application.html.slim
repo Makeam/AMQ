@@ -25,22 +25,26 @@ html lang="en"
           = link_to 'AMQ', root_path, class:'navbar-brand'
           .navbar-collapse.collapse.navbar-responsive-collapse
             ul.nav.navbar-nav
-              li= link_to "Link 1", "/path1"
-              li= link_to "Link 2", "/path2"
-              li= link_to "Link 3", "/path3"
+              - if user_signed_in?
+                li: p.navbar-text = current_user.email
+                li = link_to 'Sign out', destroy_user_session_path, method: 'delete'
+              - else
+                li = link_to 'Sign in', new_user_session_path
+                li = link_to 'Registration', new_user_registration_path
+                /li= link_to "Link 1", "/path1"
+                /li= link_to "Link 2", "/path2"
+                /li= link_to "Link 3", "/path3"
+            = simple_form_for :search, url: search_path, method: :get, html: { class: 'navbar-form navbar-right' } do |f|
+              = f.input :query, as: :string, label: false
+              .form-group
+                = f.input :filter, collection:['Question', 'Answer', 'Comment', 'User'], prompt: 'All', label: false
+              = f.submit 'Search', class: 'btn btn-default'
 
     .container
       .row
         .col-lg-9
           //= bootstrap_flash
 
-          - if user_signed_in?
-              => current_user.email
-              = link_to 'Sign out', destroy_user_session_path, method: 'delete'
-          - else
-              = link_to 'Sign in', new_user_session_path
-              | or
-              = link_to 'Registration', new_user_registration_path
 
 
           = yield
