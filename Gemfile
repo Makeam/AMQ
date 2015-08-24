@@ -45,6 +45,10 @@ gem 'active_model_serializers'
 gem 'sidekiq'
 gem "sinatra", ">=1.3.0", require: nil
 
+gem "mysql2"
+gem "thinking-sphinx"
+gem 'simple_form'
+
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"
 gem 'less-rails-bootstrap'

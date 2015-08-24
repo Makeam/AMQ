@@ -1,0 +1,8 @@
+.result
+  - @results.each do |result|
+    - if result.try(:body)
+      h5 = result.try(:title)
+      = result.body
+    - else
+      = result.email
+    hr
