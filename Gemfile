@@ -47,7 +47,10 @@ gem 'sidekiq'
 gem "sinatra", ">=1.3.0", require: nil
 
 gem 'whenever'
-gem 'figaro'
+#gem 'figaro'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
+
 
 gem "mysql2"
 gem "thinking-sphinx"
