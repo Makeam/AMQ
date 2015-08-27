@@ -45,6 +45,9 @@ gem 'active_model_serializers'
 gem 'sidekiq'
 gem "sinatra", ">=1.3.0", require: nil
 
+gem 'whenever'
+gem 'figaro'
+
 gem "mysql2"
 gem "thinking-sphinx"
 gem 'simple_form'
@@ -52,6 +55,14 @@ gem 'simple_form'
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem "therubyracer"
 gem 'less-rails-bootstrap'
+
+group :development do
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+end
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

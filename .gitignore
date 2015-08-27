@@ -18,8 +18,12 @@
 # Ignore DB settings and keys
 /config/database.yml
 /config/secrets.yml
+/config/private_pub.yml
 .idea
 
 dump.rdb
 config/*.sphinx.conf
 db/sphinx
+
+# Ignore application configuration
+/config/application.yml
