@@ -25,6 +25,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 
 gem 'slim-rails'
+gem 'slim', '~> 3.0.6'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
