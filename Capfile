@@ -9,6 +9,9 @@ require 'capistrano/bundler'
 require 'capistrano/rails'
 require 'whenever/capistrano'
 require 'capistrano/sidekiq'
+require 'thinking_sphinx/capistrano'
+require 'capistrano3/unicorn'
+
 
 # Include tasks from other gems included in your Gemfile
 #
