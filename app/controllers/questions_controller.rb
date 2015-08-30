@@ -36,7 +36,8 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = Question.includes(:answers, :comments).find(params[:id])
+    @question = Question.find(params[:id])
+    #@question = Question.includes(:answers, :attachments, :comments).find(params[:id])
   end
 
   def publish_to

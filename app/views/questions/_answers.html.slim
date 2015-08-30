@@ -1,2 +1,6 @@
-- @question.answers.each do |a|
+/- @question.answers.each do |a|
+- Rails.logger.info "================== INCLUDES ============================="
+- answers = @question.answers.includes(:votes, :user, :attachments, {comments: :user})
+- answers.each do |a|
+  - Rails.logger.info "==========================================================="
   = render partial:'questions/uno_answer', locals: {answer: a, question: @question}

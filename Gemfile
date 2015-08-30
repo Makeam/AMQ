@@ -52,7 +52,7 @@ gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 
 gem 'unicorn'
-
+gem 'redis-rails'
 
 gem "mysql2"
 gem "thinking-sphinx"
