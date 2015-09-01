@@ -15,4 +15,10 @@ module ApplicationHelper
     "#{model.to_s.pluralize}/collection-#{count}-#{max_updated_at}"
   end
 
+  def cache_association_key(object, association_name, collection)
+    count = collection.count
+    max_updated_at = collection.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    "#{object.model_name.name}/#{object.id}/collection-#{association_name}-#{count}-#{max_updated_at}"
+  end
+
 end

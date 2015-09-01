@@ -2,9 +2,10 @@
   - if commentable.comments.any?
     p: b Комментарии:
   - commentable.comments.find_each do |c|
-    div id="comment-#{c.id}"
-      p.small = c.body
-      p.small.text-muted = c.user.email
+    - cache c do
+      div id="comment-#{c.id}"
+        p.small = c.body
+        p.small.text-muted = c.user.email
 .new-comment-form
 -if user_signed_in?
   => link_to 'Add comment', '', class:'btn btn-xs btn-default add-comment-link', data:{commentable_id: commentable.id, commentable_type: commentable_type}
