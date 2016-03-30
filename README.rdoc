@@ -1,28 +1,12 @@
-== README
+= AMQ
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+AMQ is a StackOverflow clone made for educational purposes during Thinknetica course - http://www.thinknetica.com
 
-Things you may want to cover:
+== Requirements
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* Ruby 2.2.1
+* Rails 4.2.1
+* PostgreSQL 9.3.9
+* Redis
+* Thin / PrivatPub
+* Sphinx
