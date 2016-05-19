@@ -1,9 +1,11 @@
-.question
-  = render partial: 'questions/question', locals:{question: @question}
-.answers data={question_id: "#{@question.id}"}
-  = render 'questions/answers'
+- cache @question do
+  .question
+    = render partial: 'questions/question', locals:{question: @question}
+  .answers data={question_id: "#{@question.id}"}
+    = render 'questions/answers'
 
-hr
+  hr
+
 - if user_signed_in?
   .form-errors.text-danger
   = form_for @question.answers.build, url: {controller:'answers', action: "create", question_id: @question}, remote: true, format:'json', data: {type: :json} do |f|
